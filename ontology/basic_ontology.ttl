@@ -1,0 +1,51 @@
+# Need All @prefix
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ddd: <http://example.org/ddd#> . # Trouver une bonne ressource
+
+# ============================================================
+# Ontology
+# ============================================================
+
+# Core label
+ddd: a owl:Ontology ;
+    rdfs:label "DDD Core Ontology" .
+
+# ============================================================
+# Classes (All DDD Artefact)
+# ============================================================
+
+# Core classes
+
+ddd:DDDConcept a owl:Class ;
+    rdfs:comment "The class of all actors" ;
+
+ddd:Strategic a owl:Class ;
+    rdfs:subClassOf ddd:DDDConcept ;
+
+ddd:Tactical a owl:Class ;
+    rdfs:subClassOf ddd:DDDConcept;
+
+    
+# Strategic
+
+ddd:ContextMap a owl:Class ;
+    rdfs:subClassOf ddd:Strategic ;
+
+ddd:BoundedContext a owl:Class ;
+    rdfs:subClassOf ddd:Strategic ;
+
+# Tactical
+
+ddd:Entity a owl:Class ;
+    rdfs:subClassOf ddd:Tactical ;
+
+ddd:ValueObject a owl:Class ;
+    rdfs:subClassOf ddd:TacticalConcept ;
+
+# ============================================================
+# Logical axioms
+# ============================================================
+
+ddd:Entity owl:disjointWith ddd:ValueObject .
