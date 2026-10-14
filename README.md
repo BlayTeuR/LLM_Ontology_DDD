@@ -2,11 +2,6 @@
 
 Convertit un fichier Context Mapper (`.cml`) en artefact OWL (`.ttl`) conforme au métamodèle DDD (`ddd-metamodel.ttl`, version 0.3.0). Aucun LLM : la conversion est déterministe.
 
-```
-test.cml ──[ cm generate + export-json-v03.ftl ]──▶ output_cml/json/test.json ──[ cml2ttl.py ]──▶ output_cml/ttl/test.ttl
-            (parseur officiel Context Mapper)                                    (mapping vers le métamodèle OWL)
-```
-
 ## Prérequis
 
 - Context Mapper CLI (`cm`) dans le `PATH`, Java 17+.
@@ -48,16 +43,3 @@ Pour valider l'artefact (SHACL, HermiT, Java requis), à part : `python cml2ttl.
 | `exposedAggregates` | `ddd:exposesAggregate` |
 
 Non converti (signalé ou absent du JSON) : contextes `TEAM`, Enum / Trait / DTO (avertissement), `import` (avertissement : exporter chaque fichier séparément), numéros de ligne, et les éléments absents du métamodèle V0 (`knowledgeLevel`, `implementationTechnology`, `useCases`, etc.).
-
-## Tester
-
-1. **Exécution** : `python main_cml_to_ttl.py insurance.cml`. Attendu : `609 triplets`, `Attribute=47`, `BoundedContext=6`, `Aggregate=10`, aucun avertissement.
-2. **Comptes** (PowerShell) :
-   ```
-   (Select-String output_cml\ttl\insurance.ttl -Pattern "a ddd:Attribute").Count    # 47
-   (Select-String output_cml\ttl\insurance.ttl -Pattern "ddd:refersTo").Count       # 18
-   ```
-3. **Déterminisme** : lancer deux fois et comparer `Get-FileHash` : les deux `.ttl` sont identiques.
-4. **Sensibilité** : copier le `.cml`, ajouter un attribut à une entité, relancer : le TTL gagne un `Attribute` et rien d'autre ne change.
-5. **Erreurs** : introduire une faute de syntaxe dans une copie : `cm` la signale et aucun JSON périmé n'est réutilisé.
-6. **Autre fichier** : essayer un second `.cml` (exemple de la documentation Context Mapper) ; lire les avertissements.
