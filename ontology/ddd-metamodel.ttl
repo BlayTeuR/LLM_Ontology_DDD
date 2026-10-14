@@ -11,29 +11,7 @@
 #  et roles de Context Mapping, Aggregate / Entity / RootEntity /
 #  ValueObject / DomainEvent, Attribute, Conflict.
 #
-#  Retire par rapport a 0.1.0 : enumerations (ContextType, KnowledgeLevel,
-#  ContextMapType, RepresentedState), AllDifferent, ModelElement,
-#  participant1/2, classe "Generic Upstream/Downstream", disjonctions non
-#  justifiees.
-#  Ajoute en 0.2.0 : restriction "au plus une RootEntity par Aggregate".
-#
-#  Ajoute en 0.3.0 : uniquement ce dont les trois detections de la V0 ont
-#  besoin (voir le cadrage V0).
-#    - Attribute / hasAttribute / attributeType : base de l'homonyme et du
-#      synonyme (comparaison des termes entre deux BC) ;
-#    - domainVisionStatement, responsibility : seuls textes du CML, preuve
-#      pour la proposition d'alignement par le LLM ;
-#    - exposesAggregate : quels termes traversent la frontiere d'une relation ;
-#    - Conflict / involves / conflictType / evidence / status / detectedBy :
-#      sortie de la V0.
-#  Texte libre et attributs : proprietes de donnees SANS domain (aucune
-#  inference de type), cadrees par SHACL (shapes.ttl).
-#  Volontairement absents (aucune regle V0 ne les utilise) : type/etat de
-#  carte, type de BC, knowledgeLevel, implementationTechnology, modules,
-#  services, useCases, droits de gouvernance, marqueurs U/D/S/C.
-#
 #  NOTE : le namespace https://example.org/... est un PLACEHOLDER.
-#         Remplace-le une fois, partout, avant tout stockage dans le KG.
 #  NOTE : le AllDifferent n'est PAS dans ce fichier : il est ajoute par le
 #         pipeline (reason.py) sur les individus de chaque artefact.
 # =====================================================================
