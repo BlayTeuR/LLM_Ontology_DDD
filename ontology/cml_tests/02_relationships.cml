@@ -1,0 +1,84 @@
+// But : tous les types de relations et de roles (UD, Customer-Supplier nommee, Partnership, SharedKernel,
+// OHS / PL / ACL / CF, relation avec un seul role, exposedAggregates).
+// EXPECT: BoundedContext=6 ContextMap=1 Aggregate=6 RootEntity=6 Attribute=6 refersTo=0 UpstreamDownstreamRelationship=3 CustomerSupplierRelationship=1 Partnership=1 SharedKernel=1 OpenHostService=2 PublishedLanguage=2 AnticorruptionLayer=1 Conformist=1 exposesAggregate=2
+
+ContextMap RelationshipsMap {
+	type = SYSTEM_LANDSCAPE
+	state = TO_BE
+	contains Catalog
+	contains Orders
+	contains Shipping
+	contains Billing
+	contains Reporting
+	contains Legacy
+
+	Orders [D,C]<-[U,S] Catalog : Catalog_Orders {
+		exposedAggregates = Products
+	}
+
+	Shipping [D,ACL]<-[U,OHS,PL] Orders {
+		exposedAggregates = OrderBook
+	}
+
+	Billing [D,CF]<-[U,OHS] Orders
+
+	Reporting [D]<-[U,PL] Billing
+
+	Shipping [P]<->[P] Billing
+
+	Reporting [SK]<->[SK] Legacy
+}
+
+BoundedContext Catalog {
+	Aggregate Products {
+		Entity Product {
+			aggregateRoot
+			String productName
+		}
+	}
+}
+
+BoundedContext Orders {
+	Aggregate OrderBook {
+		Entity Order {
+			aggregateRoot
+			int orderNr
+		}
+	}
+}
+
+BoundedContext Shipping {
+	Aggregate Shipments {
+		Entity Shipment {
+			aggregateRoot
+			String trackingCode
+		}
+	}
+}
+
+BoundedContext Billing {
+	Aggregate Invoices {
+		Entity Invoice {
+			aggregateRoot
+			BigDecimal amount
+		}
+	}
+}
+
+BoundedContext Reporting {
+	Aggregate Reports {
+		Entity Report {
+			aggregateRoot
+			Date generatedOn
+		}
+	}
+}
+
+BoundedContext Legacy {
+	Aggregate LegacyData {
+		Entity LegacyRecord {
+			aggregateRoot
+			String payload
+		}
+	}
+}

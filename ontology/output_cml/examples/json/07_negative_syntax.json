@@ -1,0 +1,31 @@
+{
+  "file": "cml_tests\\07_negative_syntax.cml",
+  "imports": [],
+  "context_maps": [
+  ],
+  "bounded_contexts": [
+    {
+      "name": "Broken",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Things",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Thing",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "name", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+  ]
+}

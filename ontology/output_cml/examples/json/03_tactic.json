@@ -1,0 +1,116 @@
+{
+  "file": "cml_tests\\03_tactic.cml",
+  "imports": [],
+  "context_maps": [
+    {
+      "name": "TacticMap",
+      "contexts": ["Library", "Loans"],
+      "relationships": [
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Library",
+          "downstream": "Loans",
+          "upstream_roles": ["OHS", "PL"],
+          "downstream_roles": ["CF"],
+          "exposes_aggregates": ["Catalog"]
+        }
+      ]
+    }
+  ],
+  "bounded_contexts": [
+    {
+      "name": "Library",
+      "domain_vision_statement": "Manages the books, their authors and publishers.",
+      "responsibilities": ["Catalog", "Publishing"],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Catalog",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Book",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "title", "type": "String", "collection": "None" }, { "name": "isbn", "type": "String", "collection": "None" }],
+              "references": [{ "name": "authors", "target": "Author", "collection": "List", "target_aggregate": "Catalog", "target_bc": "Library" }, { "name": "publisher", "target": "Publisher", "collection": "None", "target_aggregate": "Publishing", "target_bc": "Library" }]
+            },
+            {
+              "name": "Isbn",
+              "kind": "value_object",
+              "root": false,
+              "attributes": [{ "name": "code", "type": "String", "collection": "None" }],
+              "references": []
+            },
+            {
+              "name": "Author",
+              "kind": "entity",
+              "root": false,
+              "attributes": [{ "name": "name", "type": "String", "collection": "None" }],
+              "references": []
+            },
+            {
+              "name": "BookAdded",
+              "kind": "domain_event",
+              "root": false,
+              "attributes": [{ "name": "addedOn", "type": "Date", "collection": "None" }],
+              "references": [{ "name": "book", "target": "Book", "collection": "None", "target_aggregate": "Catalog", "target_bc": "Library" }]
+            }
+          ]
+        },
+        {
+          "name": "Publishing",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Publisher",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "name", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Loans",
+      "domain_vision_statement": "Lends books to members.",
+      "responsibilities": ["Lending"],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Lending",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Loan",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "dueDate", "type": "Date", "collection": "None" }],
+              "references": [{ "name": "book", "target": "Book", "collection": "None", "target_aggregate": "Catalog", "target_bc": "Library" }, { "name": "member", "target": "Member", "collection": "None", "target_aggregate": "Lending", "target_bc": "Loans" }]
+            },
+            {
+              "name": "Member",
+              "kind": "entity",
+              "root": false,
+              "attributes": [{ "name": "name", "type": "String", "collection": "None" }],
+              "references": []
+            },
+            {
+              "name": "LoanCreated",
+              "kind": "domain_event",
+              "root": false,
+              "attributes": [{ "name": "createdOn", "type": "Date", "collection": "None" }],
+              "references": [{ "name": "loan", "target": "Loan", "collection": "None", "target_aggregate": "Lending", "target_bc": "Loans" }]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+  ]
+}

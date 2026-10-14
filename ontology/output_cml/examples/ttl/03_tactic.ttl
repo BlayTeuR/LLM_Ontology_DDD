@@ -1,0 +1,224 @@
+@prefix ddd: <https://example.org/ddd-metamodel#> .
+
+<https://example.org/kg/insurance/map/TacticMap> a ddd:ContextMap ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "TacticMap" ;
+    ddd:showsRelationship <https://example.org/kg/insurance/rel/Library--Loans> ;
+    ddd:showsRelevantContext <https://example.org/kg/insurance/bc/Library>,
+        <https://example.org/kg/insurance/bc/Loans> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Author/name> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "name" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Book/authors> a ddd:Attribute ;
+    ddd:attributeType "Author" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "authors" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Library/Catalog/Author> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Book/isbn> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "isbn" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Book/publisher> a ddd:Attribute ;
+    ddd:attributeType "Publisher" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "publisher" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Library/Publishing/Publisher> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Book/title> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "title" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/BookAdded> a ddd:DomainEvent ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Library/Catalog/BookAdded/addedOn>,
+        <https://example.org/kg/insurance/bc/Library/Catalog/BookAdded/book> ;
+    ddd:name "BookAdded" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/BookAdded/addedOn> a ddd:Attribute ;
+    ddd:attributeType "Date" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "addedOn" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/BookAdded/book> a ddd:Attribute ;
+    ddd:attributeType "Book" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "book" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Library/Catalog/Book> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Isbn> a ddd:ValueObject ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Library/Catalog/Isbn/code> ;
+    ddd:name "Isbn" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Isbn/code> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "code" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Publishing> a ddd:Aggregate ;
+    ddd:containsEntity <https://example.org/kg/insurance/bc/Library/Publishing/Publisher> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "Publishing" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Publishing/Publisher/name> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "name" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending> a ddd:Aggregate ;
+    ddd:containsDomainEvent <https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated> ;
+    ddd:containsEntity <https://example.org/kg/insurance/bc/Loans/Lending/Loan>,
+        <https://example.org/kg/insurance/bc/Loans/Lending/Member> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "Lending" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Loan/book> a ddd:Attribute ;
+    ddd:attributeType "Book" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "book" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Library/Catalog/Book> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Loan/dueDate> a ddd:Attribute ;
+    ddd:attributeType "Date" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "dueDate" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Loan/member> a ddd:Attribute ;
+    ddd:attributeType "Member" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "member" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Loans/Lending/Member> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated> a ddd:DomainEvent ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated/createdOn>,
+        <https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated/loan> ;
+    ddd:name "LoanCreated" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated/createdOn> a ddd:Attribute ;
+    ddd:attributeType "Date" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "createdOn" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/LoanCreated/loan> a ddd:Attribute ;
+    ddd:attributeType "Loan" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "loan" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/Loans/Lending/Loan> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Member/name> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "name" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/rel/Library--Loans> a ddd:UpstreamDownstreamRelationship ;
+    ddd:downstream <https://example.org/kg/insurance/bc/Loans> ;
+    ddd:exposesAggregate <https://example.org/kg/insurance/bc/Library/Catalog> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/Library--Loans/CF> ;
+    ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/Library--Loans/OHS>,
+        <https://example.org/kg/insurance/rel/Library--Loans/PL> ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" ;
+    ddd:upstream <https://example.org/kg/insurance/bc/Library> .
+
+<https://example.org/kg/insurance/rel/Library--Loans/CF> a ddd:Conformist ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/rel/Library--Loans/OHS> a ddd:OpenHostService ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/rel/Library--Loans/PL> a ddd:PublishedLanguage ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library> a ddd:BoundedContext ;
+    ddd:domainVisionStatement "Manages the books, their authors and publishers." ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAggregate <https://example.org/kg/insurance/bc/Library/Catalog>,
+        <https://example.org/kg/insurance/bc/Library/Publishing> ;
+    ddd:name "Library" ;
+    ddd:responsibility "Catalog",
+        "Publishing" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog> a ddd:Aggregate ;
+    ddd:containsDomainEvent <https://example.org/kg/insurance/bc/Library/Catalog/BookAdded> ;
+    ddd:containsEntity <https://example.org/kg/insurance/bc/Library/Catalog/Author>,
+        <https://example.org/kg/insurance/bc/Library/Catalog/Book> ;
+    ddd:containsValueObject <https://example.org/kg/insurance/bc/Library/Catalog/Isbn> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "Catalog" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Author> a ddd:Entity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Library/Catalog/Author/name> ;
+    ddd:name "Author" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Publishing/Publisher> a ddd:RootEntity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Library/Publishing/Publisher/name> ;
+    ddd:name "Publisher" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans> a ddd:BoundedContext ;
+    ddd:domainVisionStatement "Lends books to members." ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAggregate <https://example.org/kg/insurance/bc/Loans/Lending> ;
+    ddd:name "Loans" ;
+    ddd:responsibility "Lending" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Loan> a ddd:RootEntity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Loans/Lending/Loan/book>,
+        <https://example.org/kg/insurance/bc/Loans/Lending/Loan/dueDate>,
+        <https://example.org/kg/insurance/bc/Loans/Lending/Loan/member> ;
+    ddd:name "Loan" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Loans/Lending/Member> a ddd:Entity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Loans/Lending/Member/name> ;
+    ddd:name "Member" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+
+<https://example.org/kg/insurance/bc/Library/Catalog/Book> a ddd:RootEntity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/Library/Catalog/Book/authors>,
+        <https://example.org/kg/insurance/bc/Library/Catalog/Book/isbn>,
+        <https://example.org/kg/insurance/bc/Library/Catalog/Book/publisher>,
+        <https://example.org/kg/insurance/bc/Library/Catalog/Book/title> ;
+    ddd:name "Book" ;
+    ddd:sourceFile "cml_tests\\03_tactic.cml" .
+

@@ -1,0 +1,87 @@
+EXPORT JSON DU CML - V0
+=======================
+
+EXPORTE
+-------
+Fichier
+  - nom du fichier .cml
+  - liste des imports (listes seulement, non suivis)
+
+Context Map
+  - nom
+  - contextes contenus (hors equipes)
+
+Relations
+  - nom (facultatif)
+  - type : amont-aval / symetrique
+  - Customer-Supplier : oui / non
+  - amont, aval
+  - roles amont : OHS, PL
+  - roles aval : ACL, CF
+  - Partnership ou SharedKernel (symetriques)
+  - les 2 participants (symetriques)
+
+Bounded Contexts (hors equipes)
+  - nom
+  - sous-domaines implementes (implements)
+
+Aggregates
+  - nom
+
+Objets d'un aggregate
+  - nom
+  - nature : entity / value_object / domain_event / other
+  - racine : true / false
+
+Domains
+  - nom
+
+Subdomains
+  - nom
+  - type : CORE_DOMAIN / SUPPORTING_DOMAIN / GENERIC_SUBDOMAIN
+
+
+NON EXPORTE
+-----------
+Context Map
+  - type, state
+
+Bounded Contexts
+  - contextes de type TEAM
+  - owner
+  - type (FEATURE, SYSTEM, APPLICATION...)
+  - domainVisionStatement
+  - responsibilities
+  - implementationTechnology
+  - knowledgeLevel
+  - realizedBoundedContexts, refinedBoundedContext
+  - modules
+
+Aggregates
+  - owner
+  - responsibilities
+  - useCases
+  - knowledgeLevel
+  - likelihoodForChange
+  - services, resources, consumers
+
+Objets
+  - attributs
+  - references
+  - operations
+  - Enum, Trait, DTO, CommandEvent, BasicType (sortent en "other", ignores)
+
+Relations
+  - implementationTechnology
+  - exposedAggregates
+  - downstreamGovernanceRights
+  - marqueurs U, D, S, C
+
+Domains et Subdomains
+  - domainVisionStatement
+  - entites declarees dans un sous-domaine
+
+Autres
+  - useCases, parties prenantes, registre de valeurs
+  - numeros de ligne
+  - contenu des fichiers importes

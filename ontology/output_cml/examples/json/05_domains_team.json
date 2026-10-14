@@ -1,0 +1,124 @@
+{
+  "file": "cml_tests\\05_domains_team.cml",
+  "imports": [],
+  "context_maps": [
+    {
+      "name": "DomainsMap",
+      "contexts": ["CartContext", "TaxContext", "WarehouseContext"],
+      "relationships": [
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "CartContext",
+          "downstream": "TaxContext",
+          "upstream_roles": ["OHS", "PL"],
+          "downstream_roles": ["ACL"],
+          "exposes_aggregates": []
+        }
+      ]
+    }
+  ],
+  "bounded_contexts": [
+    {
+      "name": "CartContext",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": ["CheckoutDomain", "SupportDomain"],
+      "aggregates": [
+        {
+          "name": "Carts",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Cart",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "cartNr", "type": "int", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TaxContext",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": ["TaxDomain"],
+      "aggregates": [
+        {
+          "name": "TaxRules",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "TaxRule",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "country", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WarehouseContext",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": ["WarehouseDomain"],
+      "aggregates": [
+        {
+          "name": "Stocks",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Stock",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "quantity", "type": "int", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OrphanContext",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Notes",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Note",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "content", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "name": "Retail",
+      "subdomains": [
+        { "name": "CheckoutDomain", "type": "CORE_DOMAIN" },
+        { "name": "SupportDomain", "type": "SUPPORTING_DOMAIN" },
+        { "name": "TaxDomain", "type": "GENERIC_SUBDOMAIN" }
+      ]
+    },
+    {
+      "name": "Logistics",
+      "subdomains": [
+        { "name": "WarehouseDomain", "type": "CORE_DOMAIN" }
+      ]
+    }
+  ]
+}

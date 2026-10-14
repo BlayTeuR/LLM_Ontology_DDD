@@ -1,0 +1,67 @@
+// But : elements tactiques : Entity racine / non racine, ValueObject, DomainEvent, attributs de plusieurs types,
+// references (listes, entre agregats, entre BC), textes (vision, responsabilites).
+// EXPECT: BoundedContext=2 ContextMap=1 Aggregate=3 RootEntity=3 Entity=2 ValueObject=1 DomainEvent=2 Attribute=15 refersTo=6 UpstreamDownstreamRelationship=1 OpenHostService=1 PublishedLanguage=1 Conformist=1 exposesAggregate=1 domainVisionStatement=2 responsibility=3
+
+ContextMap TacticMap {
+	type = SYSTEM_LANDSCAPE
+	state = TO_BE
+	contains Library
+	contains Loans
+
+	Loans [D,CF]<-[U,OHS,PL] Library {
+		exposedAggregates = Catalog
+	}
+}
+
+BoundedContext Library {
+	domainVisionStatement = "Manages the books, their authors and publishers."
+	responsibilities = "Catalog", "Publishing"
+
+	Aggregate Catalog {
+		Entity Book {
+			aggregateRoot
+			String title
+			String isbn
+			- List<Author> authors
+			- Publisher publisher
+		}
+		ValueObject Isbn {
+			String code
+		}
+		Entity Author {
+			String name
+		}
+		DomainEvent BookAdded {
+			Date addedOn
+			- Book book
+		}
+	}
+
+	Aggregate Publishing {
+		Entity Publisher {
+			aggregateRoot
+			String name
+		}
+	}
+}
+
+BoundedContext Loans {
+	domainVisionStatement = "Lends books to members."
+	responsibilities = "Lending"
+
+	Aggregate Lending {
+		Entity Loan {
+			aggregateRoot
+			Date dueDate
+			- Book book
+			- Member member
+		}
+		Entity Member {
+			String name
+		}
+		DomainEvent LoanCreated {
+			Date createdOn
+			- Loan loan
+		}
+	}
+}

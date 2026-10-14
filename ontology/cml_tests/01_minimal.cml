@@ -1,0 +1,11 @@
+// But : cas minimal, SANS ContextMap et SANS Domain (le JSON doit avoir context_maps et domains vides).
+// EXPECT: BoundedContext=1 Aggregate=1 RootEntity=1 Attribute=1 refersTo=0
+
+BoundedContext Sales {
+	Aggregate Orders {
+		Entity Order {
+			aggregateRoot
+			int orderNr
+		}
+	}
+}

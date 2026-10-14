@@ -1,0 +1,31 @@
+// But (NEGATIF) : deux relations SANS nom, meme amont et meme aval -> meme IRI "rel/Orders--Billing".
+// Le convertisseur doit refuser et dire de donner un nom aux relations.
+// EXPECT: ERROR meme IRI
+
+ContextMap CollisionMap {
+	type = SYSTEM_LANDSCAPE
+	state = TO_BE
+	contains Orders
+	contains Billing
+
+	Orders [U,OHS]->[D,ACL] Billing
+	Orders [U,PL]->[D,CF] Billing
+}
+
+BoundedContext Orders {
+	Aggregate OrderBook {
+		Entity Order {
+			aggregateRoot
+			int orderNr
+		}
+	}
+}
+
+BoundedContext Billing {
+	Aggregate Invoices {
+		Entity Invoice {
+			aggregateRoot
+			BigDecimal amount
+		}
+	}
+}

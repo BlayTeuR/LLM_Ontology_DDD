@@ -1,0 +1,70 @@
+// But : Domain et Subdomain (CORE / SUPPORTING / GENERIC), un BC qui implemente deux sous-domaines,
+// un BC de type TEAM (doit etre ignore), un BC absent de la ContextMap.
+// EXPECT: BoundedContext=4 ContextMap=1 Domain=2 CoreDomain=2 SupportingSubdomain=1 GenericSubdomain=1 Aggregate=4 RootEntity=4 Attribute=4 refersTo=0 UpstreamDownstreamRelationship=1 OpenHostService=1 PublishedLanguage=1 AnticorruptionLayer=1 implementsPartOf=4
+
+ContextMap DomainsMap {
+	type = SYSTEM_LANDSCAPE
+	state = TO_BE
+	contains CartContext
+	contains TaxContext
+	contains WarehouseContext
+
+	CartContext [U,OHS,PL]->[D,ACL] TaxContext
+}
+
+BoundedContext CartContext implements CheckoutDomain, SupportDomain {
+	Aggregate Carts {
+		Entity Cart {
+			aggregateRoot
+			int cartNr
+		}
+	}
+}
+
+BoundedContext TaxContext implements TaxDomain {
+	Aggregate TaxRules {
+		Entity TaxRule {
+			aggregateRoot
+			String country
+		}
+	}
+}
+
+BoundedContext WarehouseContext implements WarehouseDomain {
+	Aggregate Stocks {
+		Entity Stock {
+			aggregateRoot
+			int quantity
+		}
+	}
+}
+
+BoundedContext OrphanContext {
+	Aggregate Notes {
+		Entity Note {
+			aggregateRoot
+			String content
+		}
+	}
+}
+
+BoundedContext RetailTeam { type TEAM }
+
+Domain Retail {
+	Subdomain CheckoutDomain {
+		type = CORE_DOMAIN
+		domainVisionStatement = "Everything about buying."
+	}
+	Subdomain SupportDomain {
+		type = SUPPORTING_DOMAIN
+	}
+	Subdomain TaxDomain {
+		type = GENERIC_SUBDOMAIN
+	}
+}
+
+Domain Logistics {
+	Subdomain WarehouseDomain {
+		type = CORE_DOMAIN
+	}
+}

@@ -1,0 +1,78 @@
+{
+  "file": "cml_tests\\06_negative_collision.cml",
+  "imports": [],
+  "context_maps": [
+    {
+      "name": "CollisionMap",
+      "contexts": ["Orders", "Billing"],
+      "relationships": [
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Orders",
+          "downstream": "Billing",
+          "upstream_roles": ["OHS"],
+          "downstream_roles": ["ACL"],
+          "exposes_aggregates": []
+        },
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Orders",
+          "downstream": "Billing",
+          "upstream_roles": ["PL"],
+          "downstream_roles": ["CF"],
+          "exposes_aggregates": []
+        }
+      ]
+    }
+  ],
+  "bounded_contexts": [
+    {
+      "name": "Orders",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "OrderBook",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Order",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "orderNr", "type": "int", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Invoices",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Invoice",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "amount", "type": "BigDecimal", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+  ]
+}

@@ -1,0 +1,194 @@
+{
+  "file": "cml_tests\\02_relationships.cml",
+  "imports": [],
+  "context_maps": [
+    {
+      "name": "RelationshipsMap",
+      "contexts": ["Catalog", "Orders", "Shipping", "Billing", "Reporting", "Legacy"],
+      "relationships": [
+        {
+          "name": "Catalog_Orders",
+          "kind": "upstream_downstream",
+          "customer_supplier": true,
+          "upstream": "Catalog",
+          "downstream": "Orders",
+          "upstream_roles": [],
+          "downstream_roles": [],
+          "exposes_aggregates": ["Products"]
+        },
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Orders",
+          "downstream": "Shipping",
+          "upstream_roles": ["OHS", "PL"],
+          "downstream_roles": ["ACL"],
+          "exposes_aggregates": ["OrderBook"]
+        },
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Orders",
+          "downstream": "Billing",
+          "upstream_roles": ["OHS"],
+          "downstream_roles": ["CF"],
+          "exposes_aggregates": []
+        },
+        {
+          "name": null,
+          "kind": "upstream_downstream",
+          "customer_supplier": false,
+          "upstream": "Billing",
+          "downstream": "Reporting",
+          "upstream_roles": ["PL"],
+          "downstream_roles": [],
+          "exposes_aggregates": []
+        },
+        {
+          "name": null,
+          "kind": "symmetric",
+          "subtype": "Partnership",
+          "participants": ["Shipping", "Billing"]
+        },
+        {
+          "name": null,
+          "kind": "symmetric",
+          "subtype": "SharedKernel",
+          "participants": ["Reporting", "Legacy"]
+        }
+      ]
+    }
+  ],
+  "bounded_contexts": [
+    {
+      "name": "Catalog",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Products",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Product",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "productName", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "OrderBook",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Order",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "orderNr", "type": "int", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shipping",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Shipments",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Shipment",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "trackingCode", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Billing",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Invoices",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Invoice",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "amount", "type": "BigDecimal", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reporting",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "Reports",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "Report",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "generatedOn", "type": "Date", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Legacy",
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+        {
+          "name": "LegacyData",
+          "responsibilities": [],
+          "objects": [
+            {
+              "name": "LegacyRecord",
+              "kind": "entity",
+              "root": true,
+              "attributes": [{ "name": "payload", "type": "String", "collection": "None" }],
+              "references": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "domains": [
+  ]
+}

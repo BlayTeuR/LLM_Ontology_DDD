@@ -1,0 +1,153 @@
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix ddd: <https://example.org/ddd-metamodel#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# Regles en MONDE FERME (SHACL) : "ce qui n'est pas ecrit n'existe pas".
+# Elles completent le metamodele OWL (qui, lui, decrit le sens et deduit) pour
+# tout ce qui est un comptage ou une presence obligatoire. Les messages sont
+# faits pour etre lus par un humain ET renvoyes au LLM dans la boucle de
+# correction.
+# =============================================================================
+
+# --- Un Aggregate a exactement une RootEntity ---------------------------------
+ddd:AggregateRootShape a sh:NodeShape ;
+    sh:targetClass ddd:Aggregate ;
+    sh:property [
+        sh:path ddd:containsEntity ;
+        sh:qualifiedValueShape [ sh:class ddd:RootEntity ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "Aggregate sans RootEntity : il en faut exactement une (aggregateRoot en CML)."
+    ] ;
+    sh:property [
+        sh:path ddd:containsEntity ;
+        sh:qualifiedValueShape [ sh:class ddd:RootEntity ] ;
+        sh:qualifiedMaxCount 1 ;
+        sh:message "Aggregate avec plusieurs RootEntity : il n'en faut qu'une seule."
+    ] .
+
+# --- Tout element nomme a exactement un nom -----------------------------------
+ddd:NamedElementShape a sh:NodeShape ;
+    sh:targetClass ddd:ContextMap, ddd:BoundedContext, ddd:Domain, ddd:Subdomain,
+                   ddd:Aggregate, ddd:Entity, ddd:ValueObject, ddd:DomainEvent,
+                   ddd:Attribute ;
+    sh:property [
+        sh:path ddd:name ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ;
+        sh:message "Element sans ddd:name unique et non vide (le nom porte l'identite)."
+    ] .
+
+# --- Provenance obligatoire : la synchronisation en depend ---------------------
+ddd:ProvenanceShape a sh:NodeShape ;
+    sh:targetSubjectsOf ddd:generatedBy ;
+    sh:property [
+        sh:path ddd:sourceFile ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Noeud sans ddd:sourceFile unique : un noeud doit appartenir a exactement une source (sinon impossible de le mettre a jour ou de le retirer proprement)."
+    ] .
+
+# --- Contexte : references typees ----------------------------------------------
+ddd:BoundedContextShape a sh:NodeShape ;
+    sh:targetClass ddd:BoundedContext ;
+    sh:property [
+        sh:path ddd:domainVisionStatement ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "Un BoundedContext a au plus un domainVisionStatement, non vide."
+    ] ;
+    sh:property [
+        sh:path ddd:responsibility ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "Une responsibility est un texte non vide."
+    ] ;
+    sh:property [
+        sh:path ddd:implementsPartOf ; sh:class ddd:Subdomain ;
+        sh:message "implementsPartOf doit designer un Subdomain existant (sous-domaine inconnu ou non importe ?)."
+    ] ;
+    sh:property [
+        sh:path ddd:hasAggregate ; sh:class ddd:Aggregate ;
+        sh:message "hasAggregate doit designer un Aggregate."
+    ] .
+
+ddd:ContextMapShape a sh:NodeShape ;
+    sh:targetClass ddd:ContextMap ;
+    sh:property [
+        sh:path ddd:showsRelevantContext ; sh:class ddd:BoundedContext ;
+        sh:message "La carte reference un BoundedContext inconnu (non defini ou non importe)."
+    ] ;
+    sh:property [
+        sh:path ddd:showsRelationship ; sh:class ddd:BoundedContextRelationship ;
+        sh:message "showsRelationship doit designer une relation entre contextes."
+    ] .
+
+# --- Relations -----------------------------------------------------------------
+ddd:UpstreamDownstreamShape a sh:NodeShape ;
+    sh:targetClass ddd:UpstreamDownstreamRelationship ;
+    sh:property [
+        sh:path ddd:upstream ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:message "Une relation amont-aval a exactement un contexte amont, qui doit etre un BoundedContext connu."
+    ] ;
+    sh:property [
+        sh:path ddd:downstream ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:message "Une relation amont-aval a exactement un contexte aval, qui doit etre un BoundedContext connu."
+    ] ;
+    sh:property [
+        sh:path ddd:upstream ; sh:disjoint ddd:downstream ;
+        sh:message "Un contexte ne peut pas etre a la fois amont et aval de la meme relation."
+    ] .
+
+ddd:ExposesShape a sh:NodeShape ;
+    sh:targetClass ddd:UpstreamDownstreamRelationship ;
+    sh:property [
+        sh:path ddd:exposesAggregate ; sh:class ddd:Aggregate ;
+        sh:message "exposesAggregate doit designer un Aggregate connu (exposedAggregates en CML)."
+    ] .
+
+ddd:SymmetricShape a sh:NodeShape ;
+    sh:targetClass ddd:SymmetricRelationship ;
+    sh:property [
+        sh:path ddd:hasParticipant ; sh:minCount 2 ; sh:class ddd:BoundedContext ;
+        sh:message "Une relation symetrique relie au moins deux BoundedContext connus."
+    ] .
+
+# --- 0.3.0 : attributs --------------------------------------------------------
+# Un Attribute appartient a exactement un terme (Entity, ValueObject, DomainEvent)
+# et a un type au plus (chaine telle qu'ecrite en CML).
+ddd:AttributeShape a sh:NodeShape ;
+    sh:targetClass ddd:Attribute ;
+    sh:property [
+        sh:path ddd:attributeType ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "Un Attribute a au plus un attributeType, non vide."
+    ] ;
+    sh:property [
+        sh:path ddd:refersTo ; sh:maxCount 1 ;
+        sh:or ( [ sh:class ddd:Entity ] [ sh:class ddd:ValueObject ] [ sh:class ddd:DomainEvent ] ) ;
+        sh:message "refersTo doit designer exactement un terme connu (Entity, ValueObject ou DomainEvent) : cible inconnue ou d'un autre type."
+    ] ;
+    sh:property [
+        sh:path [ sh:inversePath ddd:hasAttribute ] ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Un Attribute doit appartenir a exactement un terme (Entity, ValueObject ou DomainEvent)."
+    ] .
+
+# --- 0.3.0 : conflits (sortie de la V0) -----------------------------------------
+# Un conflit implique toujours au moins deux elements : pour un conflit de
+# relation, la relation ET le BC fautif.
+ddd:ConflictShape a sh:NodeShape ;
+    sh:targetClass ddd:Conflict ;
+    sh:property [
+        sh:path ddd:involves ; sh:minCount 2 ;
+        sh:message "Un Conflict implique au moins deux elements (ddd:involves)."
+    ] ;
+    sh:property [
+        sh:path ddd:conflictType ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "homonym" "synonym" "relation" ) ;
+        sh:message "conflictType obligatoire, unique, parmi : homonym, synonym, relation."
+    ] ;
+    sh:property [
+        sh:path ddd:status ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "proposed" "validated" "rejected" ) ;
+        sh:message "status obligatoire, unique, parmi : proposed, validated, rejected."
+    ] ;
+    sh:property [
+        sh:path ddd:detectedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^(llm|rule:.+)$" ;
+        sh:message "detectedBy obligatoire : 'llm' ou 'rule:<identifiant>'."
+    ] ;
+    sh:property [
+        sh:path ddd:evidence ; sh:minCount 1 ; sh:minLength 1 ;
+        sh:message "Un Conflict doit porter une evidence lisible (elements compares, difference)."
+    ] .
