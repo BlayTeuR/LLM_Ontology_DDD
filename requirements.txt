@@ -1,0 +1,10 @@
+# Convertisseur CML -> TTL
+rdflib>=7.0
+
+# Chargement dans Neo4j
+neo4j>=5.0
+python-dotenv>=1.0
+
+# Validation facultative (cml2ttl.py --validate)
+# pyshacl
+# owlready2
