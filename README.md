@@ -4,7 +4,7 @@ A Hybrid LLM–Ontology Approach for Constructing the Ubiquitous Language and Re
 
 | Tool | What | Example |
 |---|---|---|
-| [**CML to OWL (.ttl)**](https://github.com/BlayTeuR/Benchmark_SP_SPMF) | Converts a Context Mapper file (.cml) into an OWL artifact (.ttl) conforming to the DDD metamodel (ddd-metamodel.ttl, version 0.3.0). No LLM involved: the conversion is deterministic. | / |
+| [**CML to OWL (.ttl)**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/cml_to_ttl) | Converts a Context Mapper file (.cml) into an OWL artifact (.ttl) conforming to the DDD metamodel (ddd-metamodel.ttl, version 0.3.0). No LLM involved: the conversion is deterministic. | / |
 
 ## Authors
 
