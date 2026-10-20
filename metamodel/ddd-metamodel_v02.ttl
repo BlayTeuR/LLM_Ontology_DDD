@@ -1,0 +1,381 @@
+@prefix ddd:  <https://example.org/ddd-metamodel#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+#  DDD Metamodel (strategic + tactical) -- version courante
+#  Source conceptuelle : metamodele de Kapferer (Strategic / Tactic DDD).
+#  Perimetre : Context Map, Bounded Context, Domain/Subdomain, relations
+#  et roles de Context Mapping, Aggregate / Entity / RootEntity /
+#  ValueObject / DomainEvent, Attribute, Conflict.
+#
+#  NOTE : le namespace https://example.org/... est un PLACEHOLDER.
+#  NOTE : le AllDifferent n'est PAS dans ce fichier : il est ajoute par le
+#         pipeline (reason.py) sur les individus de chaque artefact.
+# =====================================================================
+
+<https://example.org/ddd-metamodel> a owl:Ontology ;
+    owl:versionIRI <https://example.org/ddd-metamodel/0.2.0> ;
+    owl:versionInfo "0.2.0 (0.1.0 + ownedBy, bcType, implementationTechnology, contextMapType, contextMapState)" ;
+    owl:priorVersion <https://example.org/ddd-metamodel/0.1.0> ;
+    rdfs:label "DDD Metamodel (strategic + tactical)" ;
+    rdfs:comment "Metamodele OWL 2 DL du DDD strategique et tactique, derive du metamodele de Kapferer, cible des artefacts generes depuis CML ou par LLM." .
+
+# ---------------------------------------------------------------------
+#  Annotation : correspondance avec les mots-cles CML (mapper pilote par
+#  la TBox). Sans effet sur le raisonnement. Valeurs a verifier contre
+#  la grammaire CML.
+# ---------------------------------------------------------------------
+
+ddd:cmlConstruct a owl:AnnotationProperty ;
+    rdfs:label "CML construct" ;
+    rdfs:comment "Mot-cle CML correspondant a cet element." .
+
+# ---------------------------------------------------------------------
+#  Classes : contexte, carte, domaine
+# ---------------------------------------------------------------------
+
+ddd:ContextMap a owl:Class ;
+    rdfs:label "Context Map" ;
+    ddd:cmlConstruct "ContextMap" .
+
+ddd:BoundedContext a owl:Class ;
+    rdfs:label "Bounded Context" ;
+    ddd:cmlConstruct "BoundedContext" .
+
+ddd:Domain a owl:Class ;
+    rdfs:label "Domain" ;
+    rdfs:comment "Extension hors diagrammes Kapferer : CML declare les sous-domaines a l'interieur d'un Domain." ;
+    ddd:cmlConstruct "Domain" .
+
+ddd:Subdomain a owl:Class ;
+    rdfs:label "Subdomain" ;
+    ddd:cmlConstruct "Subdomain" .
+
+ddd:CoreDomain a owl:Class ;
+    rdfs:subClassOf ddd:Subdomain ;
+    rdfs:label "Core Domain" ;
+    ddd:cmlConstruct "CORE_DOMAIN" .
+
+ddd:SupportingSubdomain a owl:Class ;
+    rdfs:subClassOf ddd:Subdomain ;
+    rdfs:label "Supporting Subdomain" ;
+    ddd:cmlConstruct "SUPPORTING_DOMAIN" .
+
+ddd:GenericSubdomain a owl:Class ;
+    rdfs:subClassOf ddd:Subdomain ;
+    rdfs:label "Generic Subdomain" ;
+    ddd:cmlConstruct "GENERIC_SUBDOMAIN" .
+
+# ---------------------------------------------------------------------
+#  Classes : relations entre Bounded Contexts
+# ---------------------------------------------------------------------
+
+ddd:BoundedContextRelationship a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:SymmetricRelationship ddd:UpstreamDownstreamRelationship ) ] ;
+    rdfs:label "Bounded Context Relationship" ;
+    rdfs:comment "Classe abstraite : ne pas instancier directement, utiliser une sous-classe." .
+
+ddd:SymmetricRelationship a owl:Class ;
+    rdfs:subClassOf ddd:BoundedContextRelationship ;
+    rdfs:label "Symmetric Relationship" .
+
+ddd:Partnership a owl:Class ;
+    rdfs:subClassOf ddd:SymmetricRelationship ;
+    rdfs:label "Partnership" ;
+    ddd:cmlConstruct "Partnership" .
+
+ddd:SharedKernel a owl:Class ;
+    rdfs:subClassOf ddd:SymmetricRelationship ;
+    rdfs:label "Shared Kernel" ;
+    ddd:cmlConstruct "Shared-Kernel" .
+
+ddd:UpstreamDownstreamRelationship a owl:Class ;
+    rdfs:subClassOf ddd:BoundedContextRelationship ;
+    rdfs:label "Upstream-Downstream Relationship" ;
+    rdfs:comment "Relation amont-aval generique (a instancier directement quand ce n'est pas un Customer-Supplier)." ;
+    ddd:cmlConstruct "Upstream-Downstream" .
+
+ddd:CustomerSupplierRelationship a owl:Class ;
+    rdfs:subClassOf ddd:UpstreamDownstreamRelationship ;
+    rdfs:label "Customer/Supplier Relationship" ;
+    ddd:cmlConstruct "Customer-Supplier" .
+
+# ---------------------------------------------------------------------
+#  Classes : roles dans une relation amont-aval
+# ---------------------------------------------------------------------
+
+ddd:UpstreamRole a owl:Class ;
+    rdfs:label "Upstream Role" ;
+    rdfs:comment "Classe abstraite : role porte par le contexte amont." .
+
+ddd:DownstreamRole a owl:Class ;
+    rdfs:label "Downstream Role" ;
+    rdfs:comment "Classe abstraite : role porte par le contexte aval." .
+
+ddd:PublishedLanguage a owl:Class ;
+    rdfs:subClassOf ddd:UpstreamRole ;
+    rdfs:label "Published Language (PL)" ;
+    ddd:cmlConstruct "PL" .
+
+ddd:OpenHostService a owl:Class ;
+    rdfs:subClassOf ddd:UpstreamRole ;
+    rdfs:label "Open Host Service (OHS)" ;
+    ddd:cmlConstruct "OHS" .
+
+ddd:AnticorruptionLayer a owl:Class ;
+    rdfs:subClassOf ddd:DownstreamRole ;
+    rdfs:label "Anticorruption Layer (ACL)" ;
+    ddd:cmlConstruct "ACL" .
+
+ddd:Conformist a owl:Class ;
+    rdfs:subClassOf ddd:DownstreamRole ;
+    rdfs:label "Conformist (CF)" ;
+    ddd:cmlConstruct "CF" .
+
+# ---------------------------------------------------------------------
+#  Classes : elements tactiques minimaux
+# ---------------------------------------------------------------------
+
+ddd:Aggregate a owl:Class ;
+    rdfs:label "Aggregate" ;
+    ddd:cmlConstruct "Aggregate" ;
+    # Regle : un Aggregate a une seule racine (RootEntity).
+    # "Au plus 1" est verifiable par HermiT (a condition que les racines
+    # soient declarees distinctes : voir reason.py). "Au moins 1" n'est pas
+    # verifiable sous l'hypothese du monde ouvert : traite en SHACL (shapes.ttl).
+    rdfs:subClassOf [ a owl:Restriction ;
+        owl:onProperty ddd:containsEntity ;
+        owl:onClass ddd:RootEntity ;
+        owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ] .
+
+ddd:Entity a owl:Class ;
+    rdfs:label "Entity" ;
+    ddd:cmlConstruct "Entity" .
+
+ddd:RootEntity a owl:Class ;
+    rdfs:subClassOf ddd:Entity ;
+    rdfs:label "Root Entity (Aggregate Root)" ;
+    ddd:cmlConstruct "aggregateRoot" .
+
+ddd:ValueObject a owl:Class ;
+    rdfs:label "Value Object" ;
+    ddd:cmlConstruct "ValueObject" .
+
+ddd:DomainEvent a owl:Class ;
+    rdfs:label "Domain Event" ;
+    ddd:cmlConstruct "DomainEvent" .
+
+ddd:Attribute a owl:Class ;
+    rdfs:label "Attribute" ;
+    rdfs:comment "Membre d'une Entity, d'un ValueObject ou d'un DomainEvent : attribut simple (String name) ou reference vers un autre terme (- Customer client, qui porte alors ddd:refersTo). Noeud (et non texte) pour pouvoir comparer les membres de deux termes entre BC. Son type est une chaine (ddd:attributeType)." ;
+    ddd:cmlConstruct "Attribute" .
+
+# ---------------------------------------------------------------------
+#  Classes : sortie de la V0 (conflits detectes, pas des elements du CML)
+# ---------------------------------------------------------------------
+
+ddd:Conflict a owl:Class ;
+    rdfs:label "Conflict" ;
+    rdfs:comment "Conflit detecte entre elements de deux BC (ou dans une relation). Produit par une regle (ddd:detectedBy = rule:<id>) ou propose par le LLM (ddd:detectedBy = llm), puis valide par un humain (ddd:status)." .
+
+# ---------------------------------------------------------------------
+#  Disjonctions
+#  Seul vrai controle de HermiT en V0 avec domain/range : detecte les
+#  erreurs de typage d'un element.
+# ---------------------------------------------------------------------
+
+[] a owl:AllDisjointClasses ; owl:members (
+    ddd:ContextMap ddd:BoundedContext ddd:Domain ddd:Subdomain
+    ddd:BoundedContextRelationship ddd:UpstreamRole ddd:DownstreamRole
+    ddd:Aggregate ddd:Entity ddd:ValueObject ddd:DomainEvent
+    ddd:Attribute ddd:Conflict ) .
+
+[] a owl:AllDisjointClasses ; owl:members ( ddd:CoreDomain ddd:SupportingSubdomain ddd:GenericSubdomain ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:SymmetricRelationship ddd:UpstreamDownstreamRelationship ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:PublishedLanguage ddd:OpenHostService ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:AnticorruptionLayer ddd:Conformist ) .
+
+# ---------------------------------------------------------------------
+#  Object properties
+# ---------------------------------------------------------------------
+
+# --- Context Map ---
+
+ddd:showsRelevantContext a owl:ObjectProperty ;
+    rdfs:label "shows relevant context" ;
+    rdfs:domain ddd:ContextMap ; rdfs:range ddd:BoundedContext .
+
+ddd:showsRelationship a owl:ObjectProperty ;
+    rdfs:label "shows relationship" ;
+    rdfs:domain ddd:ContextMap ; rdfs:range ddd:BoundedContextRelationship .
+
+# --- Bounded Context <-> Subdomain ---
+
+ddd:implementsPartOf a owl:ObjectProperty ;
+    rdfs:label "implements part of" ;
+    rdfs:domain ddd:BoundedContext ; rdfs:range ddd:Subdomain ;
+    owl:inverseOf ddd:implementedBy .
+
+ddd:implementedBy a owl:ObjectProperty ;
+    rdfs:domain ddd:Subdomain ; rdfs:range ddd:BoundedContext .
+
+# --- Bounded Context <-> Aggregate ---
+
+ddd:hasAggregate a owl:ObjectProperty ;
+    rdfs:label "has aggregate" ;
+    rdfs:comment "Le diagramme Kapferer parle de 'implements multiple' entre Bounded Context et Aggregate." ;
+    rdfs:domain ddd:BoundedContext ; rdfs:range ddd:Aggregate ;
+    owl:inverseOf ddd:aggregateOf .
+
+ddd:aggregateOf a owl:ObjectProperty ;
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:BoundedContext .
+
+ddd:ownedBy a owl:ObjectProperty ;
+    rdfs:label "owned by" ;
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:BoundedContext .
+
+# --- Domain <-> Subdomain ---
+
+ddd:hasSubdomain a owl:ObjectProperty ;
+    rdfs:label "has subdomain" ;
+    rdfs:domain ddd:Domain ; rdfs:range ddd:Subdomain ;
+    owl:inverseOf ddd:subdomainOf .
+
+ddd:subdomainOf a owl:ObjectProperty ;
+    rdfs:domain ddd:Subdomain ; rdfs:range ddd:Domain .
+
+# --- Contenu des agregats / sous-domaines ---
+
+ddd:containsEntity a owl:ObjectProperty ;
+    rdfs:label "contains entity" ;
+    rdfs:comment "Une Entity est contenue par un Aggregate ou un Subdomain (les deux sont montres dans les diagrammes Kapferer). La racine est une Entity de type RootEntity." ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( ddd:Aggregate ddd:Subdomain ) ] ;
+    rdfs:range ddd:Entity .
+
+ddd:containsValueObject a owl:ObjectProperty ;
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:ValueObject .
+
+ddd:containsDomainEvent a owl:ObjectProperty ;
+    rdfs:comment "Simplification : le diagramme tactique de Kapferer ne montre pas cette composition ; CML declare les DomainEvents dans un Aggregate (a verifier)." ;
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:DomainEvent .
+
+ddd:hasAttribute a owl:ObjectProperty ;
+    rdfs:label "has attribute" ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( ddd:Entity ddd:ValueObject ddd:DomainEvent ) ] ;
+    rdfs:range ddd:Attribute .
+
+ddd:refersTo a owl:ObjectProperty ;
+    rdfs:label "refers to" ;
+    rdfs:comment "Une reference CML (- Type nom) est un Attribute dont le type est un autre terme : refersTo designe ce terme. C'est le lien de dependance entre termes, y compris entre BC differents (un BC qui reference un terme defini dans un autre)." ;
+    rdfs:domain ddd:Attribute ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( ddd:Entity ddd:ValueObject ddd:DomainEvent ) ] .
+
+# --- Conflits ---
+
+ddd:involves a owl:ObjectProperty ;
+    rdfs:label "involves" ;
+    rdfs:comment "Elements en conflit (BC, Entity, ValueObject, Attribute, relation...). Pas de range : le type depend du conflit." ;
+    rdfs:domain ddd:Conflict .
+
+# --- Relations ---
+
+ddd:hasParticipant a owl:ObjectProperty ;
+    rdfs:label "has participant" ;
+    rdfs:domain ddd:SymmetricRelationship ; rdfs:range ddd:BoundedContext .
+
+ddd:upstream a owl:ObjectProperty ;
+    rdfs:domain ddd:UpstreamDownstreamRelationship ; rdfs:range ddd:BoundedContext .
+
+ddd:downstream a owl:ObjectProperty ;
+    rdfs:domain ddd:UpstreamDownstreamRelationship ; rdfs:range ddd:BoundedContext .
+
+ddd:hasUpstreamRole a owl:ObjectProperty ;
+    rdfs:label "has upstream role" ;
+    rdfs:domain ddd:UpstreamDownstreamRelationship ; rdfs:range ddd:UpstreamRole .
+
+ddd:hasDownstreamRole a owl:ObjectProperty ;
+    rdfs:label "has downstream role" ;
+    rdfs:domain ddd:UpstreamDownstreamRelationship ; rdfs:range ddd:DownstreamRole .
+
+ddd:exposesAggregate a owl:ObjectProperty ;
+    rdfs:label "exposes aggregate" ;
+    rdfs:comment "CML exposedAggregates : agregats que le contexte amont expose a l'aval, c.-a-d. les termes qui traversent la frontiere." ;
+    rdfs:domain ddd:UpstreamDownstreamRelationship ; rdfs:range ddd:Aggregate .
+
+# ---------------------------------------------------------------------
+#  Datatype properties (pas de domain : aucune inference de type)
+# ---------------------------------------------------------------------
+
+ddd:name a owl:DatatypeProperty ;
+    rdfs:label "name" ;
+    rdfs:comment "Identifiant tel qu'ecrit dans le CML (ou terme du Ubiquitous Language). Deux elements de contextes differents peuvent partager le meme name avec des IRI distinctes." ;
+    rdfs:range xsd:string .
+
+ddd:bcType a owl:DatatypeProperty ;
+    rdfs:label "bounded context type" ;
+    rdfs:comment "Type du BC en CML : FEATURE | APPLICATION | SYSTEM | TEAM (liste fermee verifiee par SHACL). TEAM = equipe, pas un contexte de modele." ;
+    rdfs:range xsd:string .
+
+ddd:contextMapType a owl:DatatypeProperty ;
+    rdfs:label "context map type" ;
+    rdfs:comment "Type de la Context Map en CML : SYSTEM_LANDSCAPE | ORGANIZATIONAL (liste fermee verifiee par SHACL). Absent si non ecrit dans le CML." ;
+    rdfs:range xsd:string .
+
+ddd:contextMapState a owl:DatatypeProperty ;
+    rdfs:label "context map state" ;
+    rdfs:comment "Etat de la Context Map en CML : AS_IS | TO_BE (liste fermee verifiee par SHACL). Absent si non ecrit dans le CML." ;
+    rdfs:range xsd:string .
+
+# --- Attributs et textes du CML (aucun domain ; cadres par SHACL) ---
+
+ddd:attributeType a owl:DatatypeProperty ;
+    rdfs:comment "Type de l'attribut tel qu'ecrit dans le CML (chaine : String, Date, nom d'un autre objet...)." ;
+    rdfs:range xsd:string .
+
+ddd:domainVisionStatement a owl:DatatypeProperty ;
+    rdfs:comment "Texte libre du BC (CML domainVisionStatement). Preuve textuelle pour l'alignement par le LLM." ;
+    rdfs:range xsd:string .
+
+ddd:implementationTechnology a owl:DatatypeProperty ;
+    rdfs:comment "Texte libre du CML (implementationTechnology), sur un BC ou une relation entre BC." ;
+    rdfs:range xsd:string .
+
+ddd:responsibility a owl:DatatypeProperty ;
+    rdfs:comment "Une responsabilite (CML responsibilities), sur un BC ou un Aggregate. Multivaluee : une valeur par responsabilite." ;
+    rdfs:range xsd:string .
+
+# --- Conflits : preuve et statut ---
+
+ddd:conflictType a owl:DatatypeProperty ;
+    rdfs:comment "homonym | synonym | relation (liste fermee verifiee par SHACL)." ;
+    rdfs:range xsd:string .
+
+ddd:evidence a owl:DatatypeProperty ;
+    rdfs:comment "Explication lisible du conflit : elements compares et difference observee." ;
+    rdfs:range xsd:string .
+
+ddd:status a owl:DatatypeProperty ;
+    rdfs:comment "proposed | validated | rejected (liste fermee verifiee par SHACL). Un conflit propose par le LLM reste 'proposed' jusqu'a validation humaine." ;
+    rdfs:range xsd:string .
+
+ddd:detectedBy a owl:DatatypeProperty ;
+    rdfs:comment "rule:<id> pour une regle deterministe, llm pour une proposition du LLM." ;
+    rdfs:range xsd:string .
+
+# --- Provenance (utile pour distinguer voie CML / voie LLM et tracer les erreurs) ---
+
+ddd:sourceFile a owl:DatatypeProperty ;
+    rdfs:comment "Chemin ou nom du fichier source (ex. fichier .cml)." ;
+    rdfs:range xsd:string .
+
+ddd:sourceLine a owl:DatatypeProperty ;
+    rdfs:comment "Ligne de la construction dans le fichier source, si connue." ;
+    rdfs:range xsd:integer .
+
+ddd:generatedBy a owl:DatatypeProperty ;
+    rdfs:comment "Producteur de l'artefact, par exemple 'cml-converter' ou 'llm'." ;
+    rdfs:range xsd:string .
