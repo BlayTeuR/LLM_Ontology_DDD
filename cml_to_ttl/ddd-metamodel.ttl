@@ -17,9 +17,10 @@
 # =====================================================================
 
 <https://example.org/ddd-metamodel> a owl:Ontology ;
-    owl:versionIRI <https://example.org/ddd-metamodel/0.3.0> ;
-    owl:versionInfo "0.3.0 (V0 allegee + attributs, textes, conflits)" ;
-    rdfs:label "DDD Metamodel (strategic + tactical) (V0)" ;
+    owl:versionIRI <https://example.org/ddd-metamodel/0.2.0> ;
+    owl:versionInfo "0.2.0 (0.1.0 + ownedBy, bcType, implementationTechnology, contextMapType, contextMapState)" ;
+    owl:priorVersion <https://example.org/ddd-metamodel/0.1.0> ;
+    rdfs:label "DDD Metamodel (strategic + tactical)" ;
     rdfs:comment "Metamodele OWL 2 DL du DDD strategique et tactique, derive du metamodele de Kapferer, cible des artefacts generes depuis CML ou par LLM." .
 
 # ---------------------------------------------------------------------
@@ -233,6 +234,10 @@ ddd:hasAggregate a owl:ObjectProperty ;
 ddd:aggregateOf a owl:ObjectProperty ;
     rdfs:domain ddd:Aggregate ; rdfs:range ddd:BoundedContext .
 
+ddd:ownedBy a owl:ObjectProperty ;
+    rdfs:label "owned by" ;
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:BoundedContext .
+
 # --- Domain <-> Subdomain ---
 
 ddd:hasSubdomain a owl:ObjectProperty ;
@@ -310,6 +315,21 @@ ddd:name a owl:DatatypeProperty ;
     rdfs:comment "Identifiant tel qu'ecrit dans le CML (ou terme du Ubiquitous Language). Deux elements de contextes differents peuvent partager le meme name avec des IRI distinctes." ;
     rdfs:range xsd:string .
 
+ddd:bcType a owl:DatatypeProperty ;
+    rdfs:label "bounded context type" ;
+    rdfs:comment "Type du BC en CML : FEATURE | APPLICATION | SYSTEM | TEAM (liste fermee verifiee par SHACL). TEAM = equipe, pas un contexte de modele." ;
+    rdfs:range xsd:string .
+
+ddd:contextMapType a owl:DatatypeProperty ;
+    rdfs:label "context map type" ;
+    rdfs:comment "Type de la Context Map en CML : SYSTEM_LANDSCAPE | ORGANIZATIONAL (liste fermee verifiee par SHACL). Absent si non ecrit dans le CML." ;
+    rdfs:range xsd:string .
+
+ddd:contextMapState a owl:DatatypeProperty ;
+    rdfs:label "context map state" ;
+    rdfs:comment "Etat de la Context Map en CML : AS_IS | TO_BE (liste fermee verifiee par SHACL). Absent si non ecrit dans le CML." ;
+    rdfs:range xsd:string .
+
 # --- Attributs et textes du CML (aucun domain ; cadres par SHACL) ---
 
 ddd:attributeType a owl:DatatypeProperty ;
@@ -318,6 +338,10 @@ ddd:attributeType a owl:DatatypeProperty ;
 
 ddd:domainVisionStatement a owl:DatatypeProperty ;
     rdfs:comment "Texte libre du BC (CML domainVisionStatement). Preuve textuelle pour l'alignement par le LLM." ;
+    rdfs:range xsd:string .
+
+ddd:implementationTechnology a owl:DatatypeProperty ;
+    rdfs:comment "Texte libre du CML (implementationTechnology), sur un BC ou une relation entre BC." ;
     rdfs:range xsd:string .
 
 ddd:responsibility a owl:DatatypeProperty ;

@@ -1,6 +1,6 @@
 """Lance main_cml_to_ttl.py sur chaque fichier de cml_tests/ et compare au en-tete `// EXPECT:`.
 
-    python run_cml_examples.py [dossier]            (defaut : cml_tests/ a cote de ce fichier)
+    python src/run_cml_examples.py [dossier]        (defaut : cml_tests/ a la racine du projet)
 
 Un en-tete `// EXPECT: Classe=n ... predicat=n` compte, dans le .ttl produit, les individus par
 classe (BoundedContext, Aggregate, Attribute...) et les triplets par propriete (refersTo,
@@ -21,9 +21,11 @@ from rdflib import Graph, RDF
 import iri
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
 D = iri.D
 PREDICATES = {"refersTo", "exposesAggregate", "responsibility", "domainVisionStatement",
-              "implementsPartOf", "hasAttribute", "implementationTechnology"}
+              "implementsPartOf", "hasAttribute", "implementationTechnology",
+              "ownedBy", "bcType", "contextMapType", "contextMapState"}
 
 
 def expectation(path):
@@ -74,8 +76,8 @@ def run_one(cml, out):
 
 
 def main():
-    folder = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "cml_tests")
-    out = os.path.join(HERE, "output_cml", "examples")
+    folder = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "cml_tests")
+    out = os.path.join(ROOT, "output_cml", "examples")
     files = sorted(glob.glob(os.path.join(folder, "*.cml")))
     if not files:
         print("aucun .cml dans", folder)

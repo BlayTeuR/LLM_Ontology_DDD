@@ -4,23 +4,23 @@
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/Sales/Orders> ;
     ddd:name "Sales" ;
-    ddd:sourceFile "cml_tests\\01_minimal.cml" .
+    ddd:sourceFile "..\\cml_tests\\01_minimal.cml" .
 
 <https://example.org/kg/insurance/bc/Sales/Orders> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/Sales/Orders/Order> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Orders" ;
-    ddd:sourceFile "cml_tests\\01_minimal.cml" .
+    ddd:sourceFile "..\\cml_tests\\01_minimal.cml" .
 
 <https://example.org/kg/insurance/bc/Sales/Orders/Order> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/Sales/Orders/Order/orderNr> ;
     ddd:name "Order" ;
-    ddd:sourceFile "cml_tests\\01_minimal.cml" .
+    ddd:sourceFile "..\\cml_tests\\01_minimal.cml" .
 
 <https://example.org/kg/insurance/bc/Sales/Orders/Order/orderNr> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "orderNr" ;
-    ddd:sourceFile "cml_tests\\01_minimal.cml" .
+    ddd:sourceFile "..\\cml_tests\\01_minimal.cml" .
 

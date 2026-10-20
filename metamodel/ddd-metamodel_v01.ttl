@@ -17,8 +17,8 @@
 # =====================================================================
 
 <https://example.org/ddd-metamodel> a owl:Ontology ;
-    owl:versionIRI <https://example.org/ddd-metamodel/0.3.0> ;
-    owl:versionInfo "0.3.0 (V0 allegee + attributs, textes, conflits)" ;
+    owl:versionIRI <https://example.org/ddd-metamodel/0.1.0> ;
+    owl:versionInfo "0.1.0 (V0 allegee + attributs, textes, conflits)" ;
     rdfs:label "DDD Metamodel (strategic + tactical) (V0)" ;
     rdfs:comment "Metamodele OWL 2 DL du DDD strategique et tactique, derive du metamodele de Kapferer, cible des artefacts generes depuis CML ou par LLM." .
 

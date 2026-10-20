@@ -1,7 +1,8 @@
 """Etape 1 : CML -> JSON, avec le parseur officiel de Context Mapper (commande `cm`).
 
-Appelle exactement ce que tu lances a la main :
-    cm generate -i <fichier.cml> -g generic -t ./export-json-v03.ftl -o <dossier> -f <nom>.json
+Valide d'abord le CML (`cm validate`, car `cm generate` accepte un CML invalide), puis appelle
+exactement ce que tu lances a la main :
+    cm generate -i <fichier.cml> -g generic -t ./export-json.ftl -o <dossier> -f <nom>.json
 Le gabarit est lance depuis son propre dossier avec le prefixe ./ (sans lui, `cm` plante
 avec « baseDir is null » sous Windows).
 """
@@ -36,6 +37,15 @@ def export_json(cml_path, json_path, template, cm="cm"):
         os.remove(json_path)
 
     cwd = os.path.dirname(os.path.abspath(template))
+
+    # `cm generate` accepte un CML invalide (code 0, aucun message) : on valide d'abord.
+    # `cm validate` rend aussi 0 en cas d'erreur, on lit donc ses lignes « ERROR ».
+    v = subprocess.run([exe, "validate", "-i", _rel(cml_path, cwd)], cwd=cwd,
+                       capture_output=True, text=True, encoding="utf-8", errors="replace")
+    erreurs = [l.strip() for l in (v.stdout + v.stderr).splitlines() if l.strip().startswith("ERROR")]
+    if erreurs:
+        raise ExportError("CML invalide (cm validate) :\n" + "\n".join(erreurs))
+
     cmd = [exe, "generate",
            "-i", _rel(cml_path, cwd),
            "-g", "generic",

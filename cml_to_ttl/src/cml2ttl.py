@@ -1,7 +1,7 @@
 """CML -> artefact OWL (Turtle), a partir du JSON exporte par le parseur officiel.
 
     cm generate -i insurance.cml -g generic -t cm-probe/export-json.ftl -o output_cml/json -f insurance.json
-    python cml2ttl.py output_cml/json/insurance.json -o insurance.ttl
+    python src/cml2ttl.py output_cml/json/insurance.json -o insurance.ttl
 
 Conversion seule : il ne faut que rdflib et iri.py. La validation (SHACL, HermiT)
 est une option : --validate (ajoute --no-hermit pour sauter HermiT, qui exige Java).
@@ -23,6 +23,7 @@ import iri
 
 D = iri.D
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)       # racine du projet (parent de src/)
 SUBDOMAIN = {"CORE_DOMAIN": D.CoreDomain, "SUPPORTING_DOMAIN": D.SupportingSubdomain,
              "GENERIC_SUBDOMAIN": D.GenericSubdomain}
 ROLE = {"OHS": D.OpenHostService, "PL": D.PublishedLanguage,
@@ -198,7 +199,7 @@ def main():
     if not a.validate:
         return 0
     import validate_artifact as va          # charge seulement si demande
-    findings = va.validate(va.load(f"{HERE}/ddd-metamodel.ttl"), va.load(f"{HERE}/shapes.ttl"), g,
+    findings = va.validate(va.load(f"{ROOT}/ddd-metamodel.ttl"), va.load(f"{ROOT}/shapes.ttl"), g,
                            hermit=not a.no_hermit)
     if findings:
         print(f"INVALIDE ({findings[0]['stage']}) :")

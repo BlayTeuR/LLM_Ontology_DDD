@@ -4,13 +4,19 @@
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/OrphanContext/Notes> ;
     ddd:name "OrphanContext" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
+
+<https://example.org/kg/insurance/bc/RetailTeam> a ddd:BoundedContext ;
+    ddd:bcType "TEAM" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "RetailTeam" ;
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/domain/Logistics> a ddd:Domain ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasSubdomain <https://example.org/kg/insurance/subdomain/WarehouseDomain> ;
     ddd:name "Logistics" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/domain/Retail> a ddd:Domain ;
     ddd:generatedBy "cml-converter" ;
@@ -18,95 +24,97 @@
         <https://example.org/kg/insurance/subdomain/SupportDomain>,
         <https://example.org/kg/insurance/subdomain/TaxDomain> ;
     ddd:name "Retail" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/map/DomainsMap> a ddd:ContextMap ;
+    ddd:contextMapState "TO_BE" ;
+    ddd:contextMapType "SYSTEM_LANDSCAPE" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "DomainsMap" ;
     ddd:showsRelationship <https://example.org/kg/insurance/rel/CartContext--TaxContext> ;
     ddd:showsRelevantContext <https://example.org/kg/insurance/bc/CartContext>,
         <https://example.org/kg/insurance/bc/TaxContext>,
         <https://example.org/kg/insurance/bc/WarehouseContext> ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/CartContext/Carts> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/CartContext/Carts/Cart> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Carts" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/CartContext/Carts/Cart> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/CartContext/Carts/Cart/cartNr> ;
     ddd:name "Cart" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/CartContext/Carts/Cart/cartNr> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "cartNr" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/OrphanContext/Notes> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/OrphanContext/Notes/Note> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Notes" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/OrphanContext/Notes/Note> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/OrphanContext/Notes/Note/content> ;
     ddd:name "Note" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/OrphanContext/Notes/Note/content> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "content" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/TaxContext/TaxRules> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/TaxContext/TaxRules/TaxRule> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "TaxRules" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/TaxContext/TaxRules/TaxRule> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/TaxContext/TaxRules/TaxRule/country> ;
     ddd:name "TaxRule" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/TaxContext/TaxRules/TaxRule/country> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "country" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/WarehouseContext> a ddd:BoundedContext ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/WarehouseContext/Stocks> ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/WarehouseDomain> ;
     ddd:name "WarehouseContext" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/WarehouseContext/Stocks> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/WarehouseContext/Stocks/Stock> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Stocks" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/WarehouseContext/Stocks/Stock> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/WarehouseContext/Stocks/Stock/quantity> ;
     ddd:name "Stock" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/WarehouseContext/Stocks/Stock/quantity> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "quantity" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/rel/CartContext--TaxContext> a ddd:UpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/TaxContext> ;
@@ -114,20 +122,20 @@
     ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/CartContext--TaxContext/ACL> ;
     ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/CartContext--TaxContext/OHS>,
         <https://example.org/kg/insurance/rel/CartContext--TaxContext/PL> ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" ;
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/CartContext> .
 
 <https://example.org/kg/insurance/rel/CartContext--TaxContext/ACL> a ddd:AnticorruptionLayer ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/rel/CartContext--TaxContext/OHS> a ddd:OpenHostService ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/rel/CartContext--TaxContext/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/CartContext> a ddd:BoundedContext ;
     ddd:generatedBy "cml-converter" ;
@@ -135,32 +143,32 @@
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/CheckoutDomain>,
         <https://example.org/kg/insurance/subdomain/SupportDomain> ;
     ddd:name "CartContext" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/bc/TaxContext> a ddd:BoundedContext ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/TaxContext/TaxRules> ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/TaxDomain> ;
     ddd:name "TaxContext" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/subdomain/CheckoutDomain> a ddd:CoreDomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "CheckoutDomain" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/subdomain/SupportDomain> a ddd:SupportingSubdomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "SupportDomain" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/subdomain/TaxDomain> a ddd:GenericSubdomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "TaxDomain" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 
 <https://example.org/kg/insurance/subdomain/WarehouseDomain> a ddd:CoreDomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "WarehouseDomain" ;
-    ddd:sourceFile "cml_tests\\05_domains_team.cml" .
+    ddd:sourceFile "..\\cml_tests\\05_domains_team.cml" .
 

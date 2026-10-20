@@ -1,0 +1,29 @@
+MAP InsuranceContextMap | type=SYSTEM_LANDSCAPE | state=TO_BE
+  REL Customer_Frontend_Backend_Relationship | tech=(absent)
+  REL - | tech=SOAP
+  REL - | tech=SOAP
+  REL - | tech=RabbitMQ
+  REL - | tech=RESTfulHTTP
+  REL - | tech=SOAP
+  REL - | tech=Shared Java Library, Communication over RESTful HTTP
+
+BC CustomerManagementContext | type=UNDEFINED | tech=(absent)
+  AGREGAT Customers | owner=ContractsTeam
+BC CustomerSelfServiceContext | type=APPLICATION | tech=PHP Web Application
+  AGREGAT CustomerFrontend | owner=(aucun)
+  AGREGAT Acounts | owner=(aucun)
+BC PrintingContext | type=SYSTEM | tech=(absent)
+  AGREGAT Printing | owner=(aucun)
+  AGREGAT Templating | owner=(aucun)
+BC PolicyManagementContext | type=FEATURE | tech=Java, Spring App
+  AGREGAT Offers | owner=ContractsTeam
+  AGREGAT Products | owner=ProductsTeam
+  AGREGAT Contract | owner=ContractsTeam
+BC RiskManagementContext | type=FEATURE | tech=Java, Spring App
+  AGREGAT Risks | owner=RisksTeam
+BC DebtCollection | type=FEATURE | tech=JEE
+  AGREGAT Debts | owner=FinancesTeam
+BC ContractsTeam | type=TEAM | tech=(absent)
+BC ProductsTeam | type=TEAM | tech=(absent)
+BC FinancesTeam | type=TEAM | tech=(absent)
+BC RisksTeam | type=TEAM | tech=(absent)

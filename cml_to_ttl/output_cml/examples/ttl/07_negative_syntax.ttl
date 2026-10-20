@@ -4,23 +4,23 @@
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/Broken/Things> ;
     ddd:name "Broken" ;
-    ddd:sourceFile "cml_tests\\07_negative_syntax.cml" .
+    ddd:sourceFile "..\\cml_tests\\07_negative_syntax.cml" .
 
 <https://example.org/kg/insurance/bc/Broken/Things> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/Broken/Things/Thing> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Things" ;
-    ddd:sourceFile "cml_tests\\07_negative_syntax.cml" .
+    ddd:sourceFile "..\\cml_tests\\07_negative_syntax.cml" .
 
 <https://example.org/kg/insurance/bc/Broken/Things/Thing> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/Broken/Things/Thing/name> ;
     ddd:name "Thing" ;
-    ddd:sourceFile "cml_tests\\07_negative_syntax.cml" .
+    ddd:sourceFile "..\\cml_tests\\07_negative_syntax.cml" .
 
 <https://example.org/kg/insurance/bc/Broken/Things/Thing/name> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "name" ;
-    ddd:sourceFile "cml_tests\\07_negative_syntax.cml" .
+    ddd:sourceFile "..\\cml_tests\\07_negative_syntax.cml" .
 

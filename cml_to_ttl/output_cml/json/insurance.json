@@ -1,13 +1,16 @@
 {
-  "file": "cml_example\\insurance.cml",
+  "file": "..\\cml_example\\insurance.cml",
   "imports": [],
   "context_maps": [
     {
       "name": "InsuranceContextMap",
+      "type": "SYSTEM_LANDSCAPE",
+      "state": "TO_BE",
       "contexts": ["CustomerManagementContext", "CustomerSelfServiceContext", "PrintingContext", "PolicyManagementContext", "RiskManagementContext", "DebtCollection"],
       "relationships": [
         {
           "name": "Customer_Frontend_Backend_Relationship",
+          "implementation_technology": null,
           "kind": "upstream_downstream",
           "customer_supplier": true,
           "upstream": "CustomerManagementContext",
@@ -18,6 +21,7 @@
         },
         {
           "name": null,
+          "implementation_technology": "SOAP",
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "PrintingContext",
@@ -28,6 +32,7 @@
         },
         {
           "name": null,
+          "implementation_technology": "SOAP",
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "PrintingContext",
@@ -38,12 +43,14 @@
         },
         {
           "name": null,
+          "implementation_technology": "RabbitMQ",
           "kind": "symmetric",
           "subtype": "Partnership",
           "participants": ["RiskManagementContext", "PolicyManagementContext"]
         },
         {
           "name": null,
+          "implementation_technology": "RESTfulHTTP",
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "CustomerManagementContext",
@@ -54,6 +61,7 @@
         },
         {
           "name": null,
+          "implementation_technology": "SOAP",
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "PrintingContext",
@@ -64,6 +72,7 @@
         },
         {
           "name": null,
+          "implementation_technology": "Shared Java Library, Communication over RESTful HTTP",
           "kind": "symmetric",
           "subtype": "SharedKernel",
           "participants": ["PolicyManagementContext", "DebtCollection"]
@@ -74,6 +83,8 @@
   "bounded_contexts": [
     {
       "name": "CustomerManagementContext",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": [],
@@ -81,6 +92,7 @@
         {
           "name": "Customers",
           "responsibilities": [],
+          "owner": "ContractsTeam",
           "objects": [
             {
               "name": "Customer",
@@ -102,6 +114,8 @@
     },
     {
       "name": "CustomerSelfServiceContext",
+      "type": "APPLICATION",
+      "implementation_technology": "PHP Web Application",
       "domain_vision_statement": "This context represents a web application which allows the customer to login and change basic data records like the address.",
       "responsibilities": ["AddressChange"],
       "implements": ["CustomerManagementDomain"],
@@ -109,6 +123,7 @@
         {
           "name": "CustomerFrontend",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "CustomerAddressChange",
@@ -122,6 +137,7 @@
         {
           "name": "Acounts",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "UserAccount",
@@ -136,6 +152,8 @@
     },
     {
       "name": "PrintingContext",
+      "type": "SYSTEM",
+      "implementation_technology": null,
       "domain_vision_statement": "An external system which provides printing services to the other Bounded Contexts.",
       "responsibilities": ["Document Printing"],
       "implements": ["PrintingDomain"],
@@ -143,6 +161,7 @@
         {
           "name": "Printing",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "PrintingJob",
@@ -163,6 +182,7 @@
         {
           "name": "Templating",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Template",
@@ -177,6 +197,8 @@
     },
     {
       "name": "PolicyManagementContext",
+      "type": "FEATURE",
+      "implementation_technology": "Java, Spring App",
       "domain_vision_statement": "This bounded context manages the contracts and policies of the customers.",
       "responsibilities": ["Offers, Contracts, Policies"],
       "implements": ["PolicyManagementDomain"],
@@ -184,6 +206,7 @@
         {
           "name": "Offers",
           "responsibilities": [],
+          "owner": "ContractsTeam",
           "objects": [
             {
               "name": "Offer",
@@ -197,6 +220,7 @@
         {
           "name": "Products",
           "responsibilities": [],
+          "owner": "ProductsTeam",
           "objects": [
             {
               "name": "Product",
@@ -217,6 +241,7 @@
         {
           "name": "Contract",
           "responsibilities": [],
+          "owner": "ContractsTeam",
           "objects": [
             {
               "name": "Contract",
@@ -245,6 +270,8 @@
     },
     {
       "name": "RiskManagementContext",
+      "type": "FEATURE",
+      "implementation_technology": "Java, Spring App",
       "domain_vision_statement": "Uses data from PolicyManagement context to calculate risks.",
       "responsibilities": ["Customer Risk Calculation"],
       "implements": ["RiskManagementDomain"],
@@ -252,6 +279,7 @@
         {
           "name": "Risks",
           "responsibilities": [],
+          "owner": "RisksTeam",
           "objects": [
             {
               "name": "CustomerRiskFactor",
@@ -273,6 +301,8 @@
     },
     {
       "name": "DebtCollection",
+      "type": "FEATURE",
+      "implementation_technology": "JEE",
       "domain_vision_statement": "The debt collection context is responsible for the financial income of the insurance company (the debts) which depend on the corresponding contracts and policies.",
       "responsibilities": ["Debts, Dunning"],
       "implements": ["DebtsDomain"],
@@ -280,6 +310,7 @@
         {
           "name": "Debts",
           "responsibilities": [],
+          "owner": "FinancesTeam",
           "objects": [
             {
               "name": "Debt",
@@ -297,6 +328,46 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "name": "ContractsTeam",
+      "type": "TEAM",
+      "implementation_technology": null,
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+      ]
+    },
+    {
+      "name": "ProductsTeam",
+      "type": "TEAM",
+      "implementation_technology": null,
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+      ]
+    },
+    {
+      "name": "FinancesTeam",
+      "type": "TEAM",
+      "implementation_technology": null,
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
+      ]
+    },
+    {
+      "name": "RisksTeam",
+      "type": "TEAM",
+      "implementation_technology": null,
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
       ]
     }
   ],

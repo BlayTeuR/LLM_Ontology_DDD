@@ -1,13 +1,16 @@
 {
-  "file": "cml_tests\\06_negative_collision.cml",
+  "file": "..\\cml_tests\\06_negative_collision.cml",
   "imports": [],
   "context_maps": [
     {
       "name": "CollisionMap",
+      "type": "SYSTEM_LANDSCAPE",
+      "state": "TO_BE",
       "contexts": ["Orders", "Billing"],
       "relationships": [
         {
           "name": null,
+          "implementation_technology": null,
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "Orders",
@@ -18,6 +21,7 @@
         },
         {
           "name": null,
+          "implementation_technology": null,
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "Orders",
@@ -32,6 +36,8 @@
   "bounded_contexts": [
     {
       "name": "Orders",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": [],
@@ -39,6 +45,7 @@
         {
           "name": "OrderBook",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Order",
@@ -53,6 +60,8 @@
     },
     {
       "name": "Billing",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": [],
@@ -60,6 +69,7 @@
         {
           "name": "Invoices",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Invoice",

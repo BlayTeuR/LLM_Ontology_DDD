@@ -62,7 +62,19 @@ ddd:BoundedContextShape a sh:NodeShape ;
     sh:property [
         sh:path ddd:hasAggregate ; sh:class ddd:Aggregate ;
         sh:message "hasAggregate doit designer un Aggregate."
-    ] .
+    ] ;
+    sh:property [
+        sh:path ddd:implementationTechnology ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "Un BoundedContext a au plus une implementationTechnology, non vide."
+    ] ;
+    sh:property [
+        sh:path ddd:bcType ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "FEATURE" "APPLICATION" "SYSTEM" "TEAM" ) ;
+        sh:message "bcType doit valoir FEATURE, APPLICATION, SYSTEM ou TEAM (une seule valeur)."
+    ] ;
+    sh:or ( [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ]
+            [ sh:property [ sh:path ddd:hasAggregate ; sh:maxCount 0 ] ] ) ;
+    sh:message "Un BoundedContext de type TEAM ne peut pas avoir d'Aggregate." .
 
 ddd:ContextMapShape a sh:NodeShape ;
     sh:targetClass ddd:ContextMap ;
@@ -71,8 +83,23 @@ ddd:ContextMapShape a sh:NodeShape ;
         sh:message "La carte reference un BoundedContext inconnu (non defini ou non importe)."
     ] ;
     sh:property [
+        sh:path ddd:showsRelevantContext ;
+        sh:node [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ] ;
+        sh:message "Un BoundedContext de type TEAM (equipe) ne peut pas etre dans showsRelevantContext."
+    ] ;
+    sh:property [
+        sh:path ddd:contextMapType ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "SYSTEM_LANDSCAPE" "ORGANIZATIONAL" ) ;
+        sh:message "contextMapType doit valoir SYSTEM_LANDSCAPE ou ORGANIZATIONAL (une seule valeur)."
+    ] ;
+    sh:property [
+        sh:path ddd:contextMapState ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "AS_IS" "TO_BE" ) ;
+        sh:message "contextMapState doit valoir AS_IS ou TO_BE (une seule valeur)."
+    ] ;
+    sh:property [
         sh:path ddd:showsRelationship ; sh:class ddd:BoundedContextRelationship ;
-        sh:message "showsRelationship doit designer une relation entre contextes."
+        sh:message "showsRelationship doit designer une relation entre contextes (BoundedContextRelationship)."
     ] .
 
 # --- Relations -----------------------------------------------------------------
@@ -91,6 +118,13 @@ ddd:UpstreamDownstreamShape a sh:NodeShape ;
         sh:message "Un contexte ne peut pas etre a la fois amont et aval de la meme relation."
     ] .
 
+ddd:RelationshipTechShape a sh:NodeShape ;
+    sh:targetClass ddd:BoundedContextRelationship ;
+    sh:property [
+        sh:path ddd:implementationTechnology ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "Une relation a au plus une implementationTechnology, non vide."
+    ] .
+
 ddd:ExposesShape a sh:NodeShape ;
     sh:targetClass ddd:UpstreamDownstreamRelationship ;
     sh:property [
@@ -105,7 +139,7 @@ ddd:SymmetricShape a sh:NodeShape ;
         sh:message "Une relation symetrique relie au moins deux BoundedContext connus."
     ] .
 
-# --- 0.3.0 : attributs --------------------------------------------------------
+# --- 0.1.0 : attributs --------------------------------------------------------
 # Un Attribute appartient a exactement un terme (Entity, ValueObject, DomainEvent)
 # et a un type au plus (chaine telle qu'ecrite en CML).
 ddd:AttributeShape a sh:NodeShape ;
@@ -124,7 +158,7 @@ ddd:AttributeShape a sh:NodeShape ;
         sh:message "Un Attribute doit appartenir a exactement un terme (Entity, ValueObject ou DomainEvent)."
     ] .
 
-# --- 0.3.0 : conflits (sortie de la V0) -----------------------------------------
+# --- 0.1.0 : conflits (sortie de la V0) -----------------------------------------
 # Un conflit implique toujours au moins deux elements : pour un conflit de
 # relation, la relation ET le BC fautif.
 ddd:ConflictShape a sh:NodeShape ;
@@ -150,4 +184,12 @@ ddd:ConflictShape a sh:NodeShape ;
     sh:property [
         sh:path ddd:evidence ; sh:minCount 1 ; sh:minLength 1 ;
         sh:message "Un Conflict doit porter une evidence lisible (elements compares, difference)."
+    ] .
+
+ddd:AggregateOwnerShape a sh:NodeShape ;
+    sh:targetClass ddd:Aggregate ;
+    sh:property [
+        sh:path ddd:ownedBy ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:node [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ;
+        sh:message "owner doit designer un BoundedContext connu de type TEAM (au plus un)."
     ] .

@@ -1,5 +1,6 @@
-// But (NEGATIF) : accolade fermante manquante -> le parseur officiel doit refuser, aucun JSON ne doit etre produit.
-// EXPECT: ERROR cm n'a pas produit le JSON
+// But (NEGATIF) : accolade fermante manquante -> `cm validate` doit signaler l'erreur, aucun JSON ne doit etre produit
+// (cm generate, lui, accepterait ce fichier).
+// EXPECT: ERROR CML invalide
 
 BoundedContext Broken {
 	Aggregate Things {

@@ -8,9 +8,11 @@
         <https://example.org/kg/insurance/subdomain/PrintingDomain>,
         <https://example.org/kg/insurance/subdomain/RiskManagementDomain> ;
     ddd:name "InsuranceDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/map/InsuranceContextMap> a ddd:ContextMap ;
+    ddd:contextMapState "TO_BE" ;
+    ddd:contextMapType "SYSTEM_LANDSCAPE" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "InsuranceContextMap" ;
     ddd:showsRelationship <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext>,
@@ -26,166 +28,173 @@
         <https://example.org/kg/insurance/bc/PolicyManagementContext>,
         <https://example.org/kg/insurance/bc/PrintingContext>,
         <https://example.org/kg/insurance/bc/RiskManagementContext> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/city> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "city" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/street> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "street" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/addresses> a ddd:Attribute ;
     ddd:attributeType "Address" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "addresses" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/firstname> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "firstname" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/lastname> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "lastname" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Acounts" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount/accountCustomer> a ddd:Attribute ;
     ddd:attributeType "Customer" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "accountCustomer" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount/username> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "username" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "CustomerFrontend" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/changedAddress>,
         <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/issuer> ;
     ddd:name "CustomerAddressChange" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/changedAddress> a ddd:Attribute ;
     ddd:attributeType "Address" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "changedAddress" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/issuer> a ddd:Attribute ;
     ddd:attributeType "UserAccount" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "issuer" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt>,
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Debts" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/FinancesTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/creationDate> a ddd:Attribute ;
     ddd:attributeType "Date" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "creationDate" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/debtNr> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "debtNr" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/dunnigs> a ddd:Attribute ;
     ddd:attributeType "Dunning" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "dunnigs" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/paymentDate> a ddd:Attribute ;
     ddd:attributeType "Date" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "paymentDate" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/paymentDeadline> a ddd:Attribute ;
     ddd:attributeType "Date" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "paymentDeadline" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/policy> a ddd:Attribute ;
     ddd:attributeType "Policy" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "policy" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/price> a ddd:Attribute ;
     ddd:attributeType "BigDecimal" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "price" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/status> a ddd:Attribute ;
     ddd:attributeType "PaymentStatus" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "status" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/debt> a ddd:Attribute ;
     ddd:attributeType "Debt" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "debt" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/dunningDate> a ddd:Attribute ;
     ddd:attributeType "Date" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "dunningDate" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/dunningNr> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "dunningNr" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/paymentDeadline> a ddd:Attribute ;
     ddd:attributeType "Date" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "paymentDeadline" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
+
+<https://example.org/kg/insurance/bc/FinancesTeam> a ddd:BoundedContext ;
+    ddd:bcType "TEAM" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "FinancesTeam" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract>,
@@ -193,59 +202,61 @@
     ddd:containsValueObject <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Contract" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/client> a ddd:Attribute ;
     ddd:attributeType "Customer" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "client" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/identifier> a ddd:Attribute ;
     ddd:attributeType "ContractId" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "identifier" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/products> a ddd:Attribute ;
     ddd:attributeType "Product" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "products" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId/contractId> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "contractId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy/contract> a ddd:Attribute ;
     ddd:attributeType "Contract" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "contract" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy/policyNr> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "policyNr" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy/price> a ddd:Attribute ;
     ddd:attributeType "BigDecimal" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "price" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Offers" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -254,71 +265,72 @@
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/price>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/products> ;
     ddd:name "Offer" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/client> a ddd:Attribute ;
     ddd:attributeType "Customer" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "client" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/offerId> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "offerId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/price> a ddd:Attribute ;
     ddd:attributeType "BigDecimal" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "price" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer/products> a ddd:Attribute ;
     ddd:attributeType "Product" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "products" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product> ;
     ddd:containsValueObject <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Products" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/ProductsTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/identifier> a ddd:Attribute ;
     ddd:attributeType "ProductId" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "identifier" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/productName> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "productName" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId/productId> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "productId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document/source> a ddd:Attribute ;
     ddd:attributeType "DomainObject" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "source" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document/template> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "template" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -326,52 +338,59 @@
         <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob/printingId>,
         <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob/template> ;
     ddd:name "PrintingJob" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob/document> a ddd:Attribute ;
     ddd:attributeType "Document" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "document" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob/printingId> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "printingId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob/template> a ddd:Attribute ;
     ddd:attributeType "Template" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "template" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Templating> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Templating" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template/templateId> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "templateId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template/templateName> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "templateName" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
+
+<https://example.org/kg/insurance/bc/ProductsTeam> a ddd:BoundedContext ;
+    ddd:bcType "TEAM" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "ProductsTeam" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor> ;
     ddd:containsValueObject <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Risks" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/RisksTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -379,39 +398,45 @@
         <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor/risks>,
         <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor/totalRiskFactor> ;
     ddd:name "CustomerRiskFactor" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor/client> a ddd:Attribute ;
     ddd:attributeType "Customer" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "client" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor/risks> a ddd:Attribute ;
     ddd:attributeType "Risk" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "risks" ;
     ddd:refersTo <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor/totalRiskFactor> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "totalRiskFactor" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk/likelihood> a ddd:Attribute ;
     ddd:attributeType "int" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "likelihood" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk/risk> a ddd:Attribute ;
     ddd:attributeType "String" ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "risk" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
+
+<https://example.org/kg/insurance/bc/RisksTeam> a ddd:BoundedContext ;
+    ddd:bcType "TEAM" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "RisksTeam" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext> a ddd:UpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/PolicyManagementContext> ;
@@ -420,40 +445,43 @@
     ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/CF> ;
     ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/OHS>,
         <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/PL> ;
-    ddd:sourceFile "cml_example\\insurance.cml" ;
+    ddd:implementationTechnology "RESTfulHTTP" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/CustomerManagementContext> .
 
 <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/CF> a ddd:Conformist ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/OHS> a ddd:OpenHostService ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/Customer_Frontend_Backend_Relationship> a ddd:CustomerSupplierRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/CustomerSelfServiceContext> ;
     ddd:exposesAggregate <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Customer_Frontend_Backend_Relationship" ;
-    ddd:sourceFile "cml_example\\insurance.cml" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/CustomerManagementContext> .
 
 <https://example.org/kg/insurance/rel/DebtCollection--PolicyManagementContext> a ddd:SharedKernel ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasParticipant <https://example.org/kg/insurance/bc/DebtCollection>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:implementationTechnology "Shared Java Library, Communication over RESTful HTTP" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PolicyManagementContext--RiskManagementContext> a ddd:Partnership ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasParticipant <https://example.org/kg/insurance/bc/PolicyManagementContext>,
         <https://example.org/kg/insurance/bc/RiskManagementContext> ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:implementationTechnology "RabbitMQ" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext> a ddd:UpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/CustomerManagementContext> ;
@@ -462,20 +490,21 @@
     ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/ACL> ;
     ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/OHS>,
         <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/PL> ;
-    ddd:sourceFile "cml_example\\insurance.cml" ;
+    ddd:implementationTechnology "SOAP" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/PrintingContext> .
 
 <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/ACL> a ddd:AnticorruptionLayer ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/OHS> a ddd:OpenHostService ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection> a ddd:UpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/DebtCollection> ;
@@ -484,20 +513,21 @@
     ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/ACL> ;
     ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/OHS>,
         <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/PL> ;
-    ddd:sourceFile "cml_example\\insurance.cml" ;
+    ddd:implementationTechnology "SOAP" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/PrintingContext> .
 
 <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/ACL> a ddd:AnticorruptionLayer ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/OHS> a ddd:OpenHostService ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--DebtCollection/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext> a ddd:UpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/PolicyManagementContext> ;
@@ -506,37 +536,40 @@
     ddd:hasDownstreamRole <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/ACL> ;
     ddd:hasUpstreamRole <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/OHS>,
         <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/PL> ;
-    ddd:sourceFile "cml_example\\insurance.cml" ;
+    ddd:implementationTechnology "SOAP" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" ;
     ddd:upstream <https://example.org/kg/insurance/bc/PrintingContext> .
 
 <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/ACL> a ddd:AnticorruptionLayer ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/OHS> a ddd:OpenHostService ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext> a ddd:BoundedContext ;
+    ddd:bcType "APPLICATION" ;
     ddd:domainVisionStatement "This context represents a web application which allows the customer to login and change basic data records like the address." ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts>,
         <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend> ;
+    ddd:implementationTechnology "PHP Web Application" ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/CustomerManagementDomain> ;
     ddd:name "CustomerSelfServiceContext" ;
     ddd:responsibility "AddressChange" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount/accountCustomer>,
         <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/Acounts/UserAccount/username> ;
     ddd:name "UserAccount" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -549,7 +582,7 @@
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/price>,
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/status> ;
     ddd:name "Debt" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning> a ddd:Entity ;
     ddd:generatedBy "cml-converter" ;
@@ -558,7 +591,7 @@
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/dunningNr>,
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning/paymentDeadline> ;
     ddd:name "Dunning" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -566,13 +599,13 @@
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/identifier>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/products> ;
     ddd:name "Contract" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId> a ddd:ValueObject ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId/contractId> ;
     ddd:name "ContractId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy> a ddd:Entity ;
     ddd:generatedBy "cml-converter" ;
@@ -580,106 +613,118 @@
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy/policyNr>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy/price> ;
     ddd:name "Policy" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId> a ddd:ValueObject ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId/productId> ;
     ddd:name "ProductId" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document> a ddd:Entity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document/source>,
         <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document/template> ;
     ddd:name "Document" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template/templateId>,
         <https://example.org/kg/insurance/bc/PrintingContext/Templating/Template/templateName> ;
     ddd:name "Template" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext> a ddd:BoundedContext ;
+    ddd:bcType "FEATURE" ;
     ddd:domainVisionStatement "Uses data from PolicyManagement context to calculate risks." ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/RiskManagementContext/Risks> ;
+    ddd:implementationTechnology "Java, Spring App" ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/RiskManagementDomain> ;
     ddd:name "RiskManagementContext" ;
     ddd:responsibility "Customer Risk Calculation" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk> a ddd:ValueObject ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk/likelihood>,
         <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk/risk> ;
     ddd:name "Risk" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/subdomain/CustomerManagementDomain> a ddd:CoreDomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "CustomerManagementDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/subdomain/DebtsDomain> a ddd:GenericSubdomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "DebtsDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/subdomain/PolicyManagementDomain> a ddd:CoreDomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "PolicyManagementDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/subdomain/PrintingDomain> a ddd:SupportingSubdomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "PrintingDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/subdomain/RiskManagementDomain> a ddd:GenericSubdomain ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "RiskManagementDomain" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
+
+<https://example.org/kg/insurance/bc/ContractsTeam> a ddd:BoundedContext ;
+    ddd:bcType "TEAM" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "ContractsTeam" ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address>,
         <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Customers" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> a ddd:Entity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/city>,
         <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/street> ;
     ddd:name "Address" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection> a ddd:BoundedContext ;
+    ddd:bcType "FEATURE" ;
     ddd:domainVisionStatement "The debt collection context is responsible for the financial income of the insurance company (the debts) which depend on the corresponding contracts and policies." ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/DebtCollection/Debts> ;
+    ddd:implementationTechnology "JEE" ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/DebtsDomain> ;
     ddd:name "DebtCollection" ;
     ddd:responsibility "Debts, Dunning" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/identifier>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/productName> ;
     ddd:name "Product" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext> a ddd:BoundedContext ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> ;
     ddd:name "CustomerManagementContext" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext> a ddd:BoundedContext ;
+    ddd:bcType "SYSTEM" ;
     ddd:domainVisionStatement "An external system which provides printing services to the other Bounded Contexts." ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/PrintingContext/Printing>,
@@ -687,14 +732,14 @@
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/PrintingDomain> ;
     ddd:name "PrintingContext" ;
     ddd:responsibility "Document Printing" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PrintingContext/Printing> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PrintingContext/Printing/Document>,
         <https://example.org/kg/insurance/bc/PrintingContext/Printing/PrintingJob> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Printing" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> a ddd:RootEntity ;
     ddd:generatedBy "cml-converter" ;
@@ -702,16 +747,18 @@
         <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/firstname>,
         <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/lastname> ;
     ddd:name "Customer" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext> a ddd:BoundedContext ;
+    ddd:bcType "FEATURE" ;
     ddd:domainVisionStatement "This bounded context manages the contracts and policies of the customers." ;
     ddd:generatedBy "cml-converter" ;
     ddd:hasAggregate <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Products> ;
+    ddd:implementationTechnology "Java, Spring App" ;
     ddd:implementsPartOf <https://example.org/kg/insurance/subdomain/PolicyManagementDomain> ;
     ddd:name "PolicyManagementContext" ;
     ddd:responsibility "Offers, Contracts, Policies" ;
-    ddd:sourceFile "cml_example\\insurance.cml" .
+    ddd:sourceFile "..\\cml_example\\insurance.cml" .
 

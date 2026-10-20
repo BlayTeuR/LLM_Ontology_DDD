@@ -1,13 +1,13 @@
 """CML -> JSON -> TTL en une commande.
 
-    python main_cml_to_ttl.py test.cml
+    python src/main_cml_to_ttl.py cml_example/insurance.cml     (depuis la racine du projet)
 
-    output_cml/json/test.json   (etape 1 : parseur officiel, cml_to_json.py)
-    output_cml/ttl/test.ttl     (etape 2 : metamodele OWL, cml2ttl.py)
+    output_cml/json/insurance.json   (etape 1 : parseur officiel, cml_to_json.py)
+    output_cml/ttl/insurance.ttl     (etape 2 : metamodele OWL, cml2ttl.py)
 
-Le dossier de sortie se change avec --out. Le gabarit export-json-v03.ftl doit
-se trouver a cote de ce fichier. Aucune validation ici (SHACL/HermiT : option
---validate de cml2ttl.py, a part).
+Le dossier de sortie se change avec --out. Le gabarit export-json.ftl est lu
+dans cm-probe/ (a la racine du projet, hors de src/). Aucune validation ici
+(SHACL/HermiT : option --validate de cml2ttl.py, a part).
 """
 import argparse
 import json
@@ -18,8 +18,9 @@ from cml2ttl import BuildError, build, print_report
 from cml_to_json import ExportError, export_json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TEMPLATE = os.path.join(HERE, "cm-probe/export-json.ftl")
-DEFAULT_OUT = os.path.join(HERE, "output_cml")
+ROOT = os.path.dirname(HERE)
+TEMPLATE = os.path.join(ROOT, "cm-probe", "export-json.ftl")
+DEFAULT_OUT = os.path.join(ROOT, "output_cml")
 
 
 def main():
@@ -42,7 +43,7 @@ def main():
         print("ERREUR :", e, file=sys.stderr)
         return 1
     except (KeyError, ValueError) as e:
-        print(f"ERREUR : JSON inattendu ({e!r}). Verifie que le gabarit est export-json-v03.ftl.",
+        print(f"ERREUR : JSON inattendu ({e!r}). Verifie que le gabarit est export-json.ftl.",
               file=sys.stderr)
         return 1
 

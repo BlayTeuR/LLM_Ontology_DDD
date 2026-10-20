@@ -1,13 +1,16 @@
 {
-  "file": "cml_tests\\03_tactic.cml",
+  "file": "..\\cml_tests\\03_tactic.cml",
   "imports": [],
   "context_maps": [
     {
       "name": "TacticMap",
+      "type": "SYSTEM_LANDSCAPE",
+      "state": "TO_BE",
       "contexts": ["Library", "Loans"],
       "relationships": [
         {
           "name": null,
+          "implementation_technology": null,
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "Library",
@@ -22,6 +25,8 @@
   "bounded_contexts": [
     {
       "name": "Library",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": "Manages the books, their authors and publishers.",
       "responsibilities": ["Catalog", "Publishing"],
       "implements": [],
@@ -29,6 +34,7 @@
         {
           "name": "Catalog",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Book",
@@ -63,6 +69,7 @@
         {
           "name": "Publishing",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Publisher",
@@ -77,6 +84,8 @@
     },
     {
       "name": "Loans",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": "Lends books to members.",
       "responsibilities": ["Lending"],
       "implements": [],
@@ -84,6 +93,7 @@
         {
           "name": "Lending",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Loan",

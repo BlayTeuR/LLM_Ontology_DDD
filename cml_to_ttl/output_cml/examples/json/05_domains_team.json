@@ -1,13 +1,16 @@
 {
-  "file": "cml_tests\\05_domains_team.cml",
+  "file": "..\\cml_tests\\05_domains_team.cml",
   "imports": [],
   "context_maps": [
     {
       "name": "DomainsMap",
+      "type": "SYSTEM_LANDSCAPE",
+      "state": "TO_BE",
       "contexts": ["CartContext", "TaxContext", "WarehouseContext"],
       "relationships": [
         {
           "name": null,
+          "implementation_technology": null,
           "kind": "upstream_downstream",
           "customer_supplier": false,
           "upstream": "CartContext",
@@ -22,6 +25,8 @@
   "bounded_contexts": [
     {
       "name": "CartContext",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": ["CheckoutDomain", "SupportDomain"],
@@ -29,6 +34,7 @@
         {
           "name": "Carts",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Cart",
@@ -43,6 +49,8 @@
     },
     {
       "name": "TaxContext",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": ["TaxDomain"],
@@ -50,6 +58,7 @@
         {
           "name": "TaxRules",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "TaxRule",
@@ -64,6 +73,8 @@
     },
     {
       "name": "WarehouseContext",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": ["WarehouseDomain"],
@@ -71,6 +82,7 @@
         {
           "name": "Stocks",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Stock",
@@ -85,6 +97,8 @@
     },
     {
       "name": "OrphanContext",
+      "type": "UNDEFINED",
+      "implementation_technology": null,
       "domain_vision_statement": null,
       "responsibilities": [],
       "implements": [],
@@ -92,6 +106,7 @@
         {
           "name": "Notes",
           "responsibilities": [],
+          "owner": null,
           "objects": [
             {
               "name": "Note",
@@ -102,6 +117,16 @@
             }
           ]
         }
+      ]
+    },
+    {
+      "name": "RetailTeam",
+      "type": "TEAM",
+      "implementation_technology": null,
+      "domain_vision_statement": null,
+      "responsibilities": [],
+      "implements": [],
+      "aggregates": [
       ]
     }
   ],
