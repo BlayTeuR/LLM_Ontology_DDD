@@ -4,8 +4,9 @@ Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming
 
 ## Requirements
 
-- Context Mapper CLI (`cm`) on the `PATH`, Java 17+.
-- Python 3 and `rdflib`: `python -m pip install rdflib`.
+- [Context Mapper CLI](https://contextmapper.org) 6.12.0 (official CML parser, used through
+  `cm generate -g generic`). Install it separately and add its `bin/` folder to your `PATH`.
+- Java (required by `cm` and HermiT), Python 3.x, Docker (Neo4j).
 
 ## Usage
 
