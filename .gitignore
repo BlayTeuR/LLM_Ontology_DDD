@@ -1,5 +1,6 @@
 # Other files and directories that are only relevant to the local environment and should not be committed to the repository.
 neo4j_docker.txt
+metamodel_todo.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
