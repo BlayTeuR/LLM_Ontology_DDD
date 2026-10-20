@@ -32,7 +32,7 @@ Output: `output_cml/json/insurance.json`, then `output_cml/ttl/insurance.ttl` (s
 
 The Python scripts import each other, so they must stay together in `src/`. Paths to the metamodel, shapes, template, tests and outputs are resolved from the project root (the parent of `src/`).
 
-Artifact validation (SHACL, HermiT; Java required) is not available yet: `validate_artifact.py`, `check_vocab.py` and `reason.py` do not exist, so `cml2ttl.py --validate` does not work.
+Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is not available yet: `validate_artifact.py` and `check_vocab.py` do not exist, so `cml2ttl.py --validate` does not work.
 
 ## What is converted
 
