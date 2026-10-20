@@ -5,7 +5,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 # =====================================================================
-#  DDD Metamodel (strategic + tactical) -- V0 allegee (0.3.0)
+#  DDD Metamodel (strategic + tactical) -- V0 allegee
 #  Source conceptuelle : metamodele de Kapferer (Strategic / Tactic DDD).
 #  Perimetre : Context Map, Bounded Context, Domain/Subdomain, relations
 #  et roles de Context Mapping, Aggregate / Entity / RootEntity /

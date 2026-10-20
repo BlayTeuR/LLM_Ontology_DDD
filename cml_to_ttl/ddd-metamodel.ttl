@@ -5,7 +5,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 
 # =====================================================================
-#  DDD Strategic Metamodel -- V0 allegee (0.3.0)
+#  DDD Metamodel (strategic + tactical) -- version courante
 #  Source conceptuelle : metamodele de Kapferer (Strategic / Tactic DDD).
 #  Perimetre : Context Map, Bounded Context, Domain/Subdomain, relations
 #  et roles de Context Mapping, Aggregate / Entity / RootEntity /
@@ -19,8 +19,8 @@
 <https://example.org/ddd-metamodel> a owl:Ontology ;
     owl:versionIRI <https://example.org/ddd-metamodel/0.3.0> ;
     owl:versionInfo "0.3.0 (V0 allegee + attributs, textes, conflits)" ;
-    rdfs:label "DDD Strategic Metamodel (V0)" ;
-    rdfs:comment "Metamodele OWL 2 DL du Strategic DDD, derive du metamodele de Kapferer, cible des artefacts generes depuis CML ou par LLM." .
+    rdfs:label "DDD Metamodel (strategic + tactical) (V0)" ;
+    rdfs:comment "Metamodele OWL 2 DL du DDD strategique et tactique, derive du metamodele de Kapferer, cible des artefacts generes depuis CML ou par LLM." .
 
 # ---------------------------------------------------------------------
 #  Annotation : correspondance avec les mots-cles CML (mapper pilote par
@@ -142,7 +142,7 @@ ddd:Conformist a owl:Class ;
 ddd:Aggregate a owl:Class ;
     rdfs:label "Aggregate" ;
     ddd:cmlConstruct "Aggregate" ;
-    # Regle Kapferer : un Aggregate a une seule racine (RootEntity).
+    # Regle : un Aggregate a une seule racine (RootEntity).
     # "Au plus 1" est verifiable par HermiT (a condition que les racines
     # soient declarees distinctes : voir reason.py). "Au moins 1" n'est pas
     # verifiable sous l'hypothese du monde ouvert : traite en SHACL (shapes.ttl).
