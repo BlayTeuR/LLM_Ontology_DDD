@@ -2,6 +2,9 @@
 neo4j_docker.txt
 metamodel_todo.md
 
+# Reasoner
+reasoner/mutations/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
