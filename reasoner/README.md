@@ -1,6 +1,6 @@
 # Reasoner (HermiT)
 
-Checks that an artifact (`.ttl` produced by the CML converter) is logically consistent with the DDD metamodel (`cml_to_ttl/ddd-metamodel.ttl`). HermiT is the OWL reasoner embedded in [Owlready2](https://owlready2.readthedocs.io).
+Checks that an artifact (`.ttl` produced by the CML converter) is logically consistent with the DDD metamodel (`metamodel/ddd-metamodel.ttl`). HermiT is the OWL reasoner embedded in [Owlready2](https://owlready2.readthedocs.io).
 
 ## Requirements
 
@@ -35,6 +35,6 @@ python reasoner/mutate.py
 
 ## Scope and limits
 
-- HermiT checks typing, disjointness and upper bounds. It does not check lower bounds ("at least one root"): OWL works under the open-world assumption, those rules belong to SHACL (`cml_to_ttl/shapes.ttl`, not wired yet).
+- HermiT checks typing, disjointness and upper bounds. It does not check lower bounds ("at least one root"): OWL works under the open-world assumption, those rules belong to SHACL (`metamodel/shapes.ttl`, not wired yet).
 - One file at a time. An inconsistency that only appears when two artifacts are combined is not detected yet.
 - The result does not gate the Neo4j loading: the two commands are run separately.
