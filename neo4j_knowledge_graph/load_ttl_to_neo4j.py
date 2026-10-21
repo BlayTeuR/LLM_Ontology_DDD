@@ -1,8 +1,7 @@
-"""TTL -> neo4j en une commande.
-    Utilisation : python load_ttl_to_neo4j.py arg1 arg2
-    arg1: the TTL file to load
-    arg2: the password for the Neo4j database
-    -> Often from the output_cml/ttl folder, so : python load_ttl_to_neo4j.py ../output_cml/ttl/test.ttl
+"""TTL -> Neo4j en une commande (depuis la racine du depot).
+    Utilisation : python neo4j_knowledge_graph/load_ttl_to_neo4j.py <fichier.ttl> [--password <mot de passe>]
+    Sans --password, le mot de passe est lu dans NEO4J_PASSWORD (fichier .env).
+    Exemple : python neo4j_knowledge_graph/load_ttl_to_neo4j.py examples/insurance/insurance.ttl
 """
 
 import argparse

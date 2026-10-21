@@ -3,8 +3,11 @@
     cm generate -i insurance.cml -g generic -t cm-probe/export-json.ftl -o output_cml/json -f insurance.json
     python src/cml2ttl.py output_cml/json/insurance.json -o insurance.ttl
 
-Conversion seule : il ne faut que rdflib et iri.py. La validation (SHACL, HermiT)
-est une option : --validate (ajoute --no-hermit pour sauter HermiT, qui exige Java).
+Conversion seule : il ne faut que rdflib et iri.py. L'option --validate (SHACL, puis HermiT)
+n'est pas disponible : validate_artifact.py n'existe pas. La coherence logique se verifie
+avec reasoner/reason.py. 
+
+Exige Java.
 
 Le JSON est la seule entree ; les IRI viennent de iri.mint ; rien n'est devine.
 Tout ce qui ne peut pas etre converti est SIGNALE (avertissements), jamais jete

@@ -1,13 +1,13 @@
 """CML -> JSON -> TTL en une commande.
 
-    python src/main_cml_to_ttl.py cml_example/insurance.cml     (depuis la racine du projet)
+    python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml     (depuis la racine du depot)
 
-    output_cml/json/insurance.json   (etape 1 : parseur officiel, cml_to_json.py)
-    output_cml/ttl/insurance.ttl     (etape 2 : metamodele OWL, cml2ttl.py)
+    cml_to_ttl/output_cml/json/insurance.json   (etape 1 : parseur officiel, cml_to_json.py)
+    cml_to_ttl/output_cml/ttl/insurance.ttl     (etape 2 : metamodele OWL, cml2ttl.py)
 
 Le dossier de sortie se change avec --out. Le gabarit export-json.ftl est lu
-dans cm-probe/ (a la racine du projet, hors de src/). Aucune validation ici
-(SHACL/HermiT : option --validate de cml2ttl.py, a part).
+dans cml_to_ttl/cm-probe/, hors de src/. Aucune validation ici : la coherence
+logique se verifie ensuite avec reasoner/reason.py (HermiT).
 """
 import argparse
 import json

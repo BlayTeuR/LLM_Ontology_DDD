@@ -1,8 +1,0 @@
-Liste des commandes utiliser :
-
-Vérification de ce qu'expose le CLI officiel de context Mapper : 
-- cm generate -i cml_example/insurance.cml -g generic -t ./probe.ftl -o output_cml -f probe.txt
-- cm generate -i cml_example/insurance.cml -g generic -t ./probe-v03.ftl -o output_cml -f probe_v03.txt
-
-Export en JSON pour Mapper :
-- cm generate -i cml_example/insurance.cml -g generic -t ./export-json-v03.ftl -o output_cml -f insurance-v03.json
