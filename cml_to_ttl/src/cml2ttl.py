@@ -15,7 +15,6 @@ import argparse
 import json
 import os
 import sys
-import validate_artifact as va          # charge seulement si demande
 from collections import Counter, defaultdict
 
 from rdflib import Graph, Literal, RDF, URIRef
@@ -200,6 +199,7 @@ def main():
     print_report(g, rep, a.out)
     if not a.validate:
         return 0
+    import validate_artifact as va          # charge seulement si demande
     findings = va.validate(va.load(os.path.join(META, "ddd-metamodel.ttl")),
                            va.load(os.path.join(META, "shapes.ttl")), g,
                            hermit=not a.no_hermit)

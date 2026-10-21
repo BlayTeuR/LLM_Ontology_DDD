@@ -16,8 +16,6 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 TBOX = os.path.join(ROOT, "metamodel", "ddd-metamodel.ttl")
 TBOX_IRI = "https://example.org/ddd-metamodel"
-META = os.path.join(os.path.dirname(ROOT), "metamodel")
-
 
 def merge_to_ntriples(tbox_path, abox_path, out_path):
     """Fusionne TBox + ABox en N-Triples et y ajoute l'axiome AllDifferent.
