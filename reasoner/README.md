@@ -12,7 +12,7 @@ Checks that an artifact (`.ttl` produced by the CML converter) is logically cons
 Run from the repository root:
 
 ```
-python reasoner/reason.py cml_to_ttl/output_cml/ttl/insurance.ttl
+python reasoner/reason.py examples/insurance/insurance.ttl
 python reasoner/mutate.py
 ```
 

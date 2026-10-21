@@ -7,7 +7,7 @@ from rdflib import Graph, Namespace, RDF
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-SOURCE = os.path.join(ROOT, "cml_to_ttl", "output_cml", "ttl", "insurance.ttl")
+SOURCE = os.path.join(ROOT, "examples", "insurance", "insurance.ttl")
 OUT_DIR = os.path.join(HERE, "mutations")
 REASON = os.path.join(HERE, "reason.py")
 

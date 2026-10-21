@@ -1,6 +1,6 @@
 # CML → Turtle (OWL) Converter
 
-Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming to the DDD metamodel (`ddd-metamodel.ttl`, version 0.2.0). No LLM involved: the conversion is deterministic.
+Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming to the DDD metamodel ([`metamodel/ddd-metamodel.ttl`](../metamodel/ddd-metamodel.ttl), version 0.2.0). No LLM involved: the conversion is deterministic.
 
 ## Requirements
 
@@ -10,14 +10,14 @@ Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming
 
 ## Usage
 
-Run everything from the project root (`cml_to_ttl/`):
+Run everything from the repository root:
 
 ```
-python src/main_cml_to_ttl.py cml_example/insurance.cml
-python src/run_cml_examples.py
+python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml
+python cml_to_ttl/src/run_cml_examples.py
 ```
 
-Output: `output_cml/json/insurance.json`, then `output_cml/ttl/insurance.ttl` (same name as the `.cml`). To use a different output folder: `--out <folder>`.
+Output: `cml_to_ttl/output_cml/json/insurance.json`, then `cml_to_ttl/output_cml/ttl/insurance.ttl` (same name as the `.cml`; this folder is generated and not versioned). To use a different output folder: `--out <folder>`. A reference output is versioned in [`examples/insurance/insurance.ttl`](../examples/insurance/insurance.ttl).
 
 ## Files
 
@@ -30,7 +30,7 @@ Output: `output_cml/json/insurance.json`, then `output_cml/ttl/insurance.ttl` (s
 | `src/iri.py` | Deterministic IRI generation |
 | `src/run_cml_examples.py` | Converter test: compares `cml_tests/*.cml` to their `// EXPECT:` header |
 
-The Python scripts import each other, so they must stay together in `src/`. Paths to the metamodel, shapes, template, tests and outputs are resolved from the project root (the parent of `src/`).
+The Python scripts import each other, so they must stay together in `src/`. Paths to the template, tests and outputs are resolved from `cml_to_ttl/` (the parent of `src/`). The metamodel (`ddd-metamodel.ttl`) and the SHACL shapes (`shapes.ttl`) live in [`../metamodel/`](../metamodel); the converter does not read them during a conversion (only the `--validate` option, not available yet, does).
 
 Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is not available yet: `validate_artifact.py` and `check_vocab.py` do not exist, so `cml2ttl.py --validate` does not work.
 

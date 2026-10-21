@@ -229,3 +229,6 @@ __marimo__/
 # Claude md
 CLAUDE.md
 .claude/
+
+# Sorties generees par le convertisseur
+cml_to_ttl/output_cml/

@@ -2,7 +2,7 @@
 
 The DDD metamodel used by the project, and its archived versions.
 
-- `ddd-metamodel.ttl`: current version (0.2.0). Used by the CML to OWL converter (`cml_to_ttl/`) and by the reasoner (`reasoner/`).
+- `ddd-metamodel.ttl`: current version (0.2.0). Read by the reasoner (`reasoner/`); the artifacts produced by the CML to OWL converter (`cml_to_ttl/`) conform to it.
 - `shapes.ttl`: SHACL rules (closed world) for the same metamodel. Not wired yet.
 - `archive/`: previous versions. When a new version starts, the current file is copied here as `ddd-metamodel_vXY.ttl` (`v01` = 0.1.0) before the root file is changed.
 
