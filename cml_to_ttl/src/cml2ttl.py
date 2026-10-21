@@ -41,7 +41,7 @@ class BuildError(Exception):
 def build(j):
     g = Graph()
     g.bind("ddd", D)
-    src, seen = j["file"], {}
+    src, seen = os.path.basename(j["file"].replace("\\", "/")), {}
     rep = {"counts": Counter(), "warnings": []}
     terms, aggs = {}, {}          # (bc, agg, objet) -> IRI ; (bc, agg) -> IRI
     refs = []                     # references a resoudre une fois tous les termes crees

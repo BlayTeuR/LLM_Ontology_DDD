@@ -27,7 +27,7 @@ def read_source_files(ttl_path):
 def replace_source(session, ttl_text, source_files):
     """Supprime de Neo4j les anciens nœuds de ces fichiers sources, puis importe le TTL à la place (rechargement propre)"""    
     for f in source_files:
-        session.run("MATCH (n {sourceFile: $f}) DETACH DELETE n", f=f)
+        session.run("MATCH (n) WHERE $f IN n.sourceFile DETACH DELETE n", f=f)
     # 2. importer le TTL (envoyé comme texte, sans chemin de fichier Docker)
     rec = session.run("CALL n10s.rdf.import.inline($rdf, 'Turtle')", rdf=ttl_text).single()
     if rec["terminationStatus"] != "OK":
