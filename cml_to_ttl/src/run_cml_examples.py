@@ -1,13 +1,13 @@
-"""Lance main_cml_to_ttl.py sur chaque fichier de cml_tests/ et compare au en-tete `// EXPECT:`.
+"""Run main_cml_to_ttl.py on each file in cml_tests/ and compare against the `// EXPECT:` header.
 
-    python src/run_cml_examples.py [dossier]        (defaut : cml_tests/ a la racine du projet)
+    python src/run_cml_examples.py [folder]        (default: cml_tests/ at the project root)
 
-Un en-tete `// EXPECT: Classe=n ... predicat=n` compte, dans le .ttl produit, les individus par
-classe (BoundedContext, Aggregate, Attribute...) et les triplets par propriete (refersTo,
-exposesAggregate, responsibility, domainVisionStatement, implementsPartOf). Une cle absente
-n'est pas verifiee, mais toute classe produite et non annoncee est signalee.
-`// EXPECT: ERROR <texte>` : la conversion doit echouer et le message doit contenir <texte>.
-Ces comptes sont ecrits a la main, pas calcules par le convertisseur.
+An `// EXPECT: Class=n ... predicate=n` header counts, in the produced .ttl, the individuals per
+class (BoundedContext, Aggregate, Attribute...) and the triples per property (refersTo,
+exposesAggregate, responsibility, domainVisionStatement, implementsPartOf). A missing key
+is not checked, but any class that is produced and not announced is reported.
+`// EXPECT: ERROR <text>`: the conversion must fail and the message must contain <text>.
+These counts are written by hand, not computed by the converter.
 """
 import glob
 import os
@@ -55,24 +55,24 @@ def run_one(cml, out):
                        capture_output=True, text=True, encoding="utf-8", errors="replace")
     msg = (r.stdout + r.stderr).strip()
     if exp is None:
-        return "?", "pas d'en-tete // EXPECT:"
+        return "?", "no // EXPECT: header"
     if exp.startswith("ERROR"):
         want = exp[len("ERROR"):].strip()
         if r.returncode == 0:
-            return "ECART", f"erreur attendue ('{want}') mais la conversion a reussi"
-        return ("OK", f"erreur attendue obtenue ('{want}')") if want in msg else \
-               ("ECART", f"erreur differente de '{want}' :\n{msg}")
+            return "MISMATCH", f"expected error ('{want}') but the conversion succeeded"
+        return ("OK", f"expected error obtained ('{want}')") if want in msg else \
+               ("MISMATCH", f"error different from '{want}':\n{msg}")
     if r.returncode != 0:
-        return "ECART", "conversion en echec :\n" + msg
+        return "MISMATCH", "conversion failed:\n" + msg
     want = {k: int(v) for k, v in (kv.split("=") for kv in exp.split())}
     stem = os.path.splitext(os.path.basename(cml))[0]
     got = counts(os.path.join(out, "ttl", stem + ".ttl"))
-    diffs = [f"{k}: attendu {v}, obtenu {got.get(k, 0)}" for k, v in want.items() if got.get(k, 0) != v]
-    extra = [f"{k}={v} (non annonce)" for k, v in got.items()
+    diffs = [f"{k}: expected {v}, got {got.get(k, 0)}" for k, v in want.items() if got.get(k, 0) != v]
+    extra = [f"{k}={v} (not announced)" for k, v in got.items()
              if k not in want and v and k not in PREDICATES]
-    warns = [l.strip() for l in r.stdout.splitlines() if "AVERTISSEMENT" in l]
-    detail = diffs + ([f"classes non annoncees : {', '.join(extra)}"] if extra else []) + warns
-    return ("ECART" if diffs else "OK"), "\n    ".join(detail)
+    warns = [l.strip() for l in r.stdout.splitlines() if "WARNING" in l]
+    detail = diffs + ([f"classes not announced: {', '.join(extra)}"] if extra else []) + warns
+    return ("MISMATCH" if diffs else "OK"), "\n    ".join(detail)
 
 
 def main():
@@ -80,14 +80,14 @@ def main():
     out = os.path.join(ROOT, "output_cml", "examples")
     files = sorted(glob.glob(os.path.join(folder, "*.cml")))
     if not files:
-        print("aucun .cml dans", folder)
+        print("no .cml in", folder)
         return 1
     bad = 0
     for f in files:
         status, detail = run_one(f, out)
         bad += status != "OK"
-        print(f"{status:6} {os.path.basename(f)}" + (f"\n    {detail}" if detail else ""))
-    print(f"\n{len(files) - bad}/{len(files)} conformes")
+        print(f"{status:8} {os.path.basename(f)}" + (f"\n    {detail}" if detail else ""))
+    print(f"\n{len(files) - bad}/{len(files)} passed")
     return 1 if bad else 0
 
 

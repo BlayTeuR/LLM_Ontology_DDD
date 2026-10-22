@@ -1,4 +1,4 @@
-// But : cas minimal, SANS ContextMap et SANS Domain (le JSON doit avoir context_maps et domains vides).
+// Goal: minimal case, WITHOUT ContextMap and WITHOUT Domain (the JSON must have empty context_maps and domains).
 // EXPECT: BoundedContext=1 Aggregate=1 RootEntity=1 Attribute=1 refersTo=0
 
 BoundedContext Sales {

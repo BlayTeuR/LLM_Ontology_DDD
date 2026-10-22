@@ -1,6 +1,6 @@
-// But (NEGATIF) : accolade fermante manquante -> `cm validate` doit signaler l'erreur, aucun JSON ne doit etre produit
-// (cm generate, lui, accepterait ce fichier).
-// EXPECT: ERROR CML invalide
+// Goal (NEGATIVE): missing closing brace -> `cm validate` must report the error, no JSON must be produced
+// (cm generate, by contrast, would accept this file).
+// EXPECT: ERROR Invalid CML
 
 BoundedContext Broken {
 	Aggregate Things {

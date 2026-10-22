@@ -1,10 +1,10 @@
-"""Etape 1 : CML -> JSON, avec le parseur officiel de Context Mapper (commande `cm`).
+"""Step 1: CML -> JSON, with the official Context Mapper parser (`cm` command).
 
-Valide d'abord le CML (`cm validate`, car `cm generate` accepte un CML invalide), puis appelle
-exactement ce que tu lances a la main :
-    cm generate -i <fichier.cml> -g generic -t ./export-json.ftl -o <dossier> -f <nom>.json
-Le gabarit est lance depuis son propre dossier avec le prefixe ./ (sans lui, `cm` plante
-avec « baseDir is null » sous Windows).
+First validates the CML (`cm validate`, since `cm generate` accepts an invalid CML), then calls
+exactly what you would run by hand:
+    cm generate -i <file.cml> -g generic -t ./export-json.ftl -o <folder> -f <name>.json
+The template is run from its own folder with the ./ prefix (without it, `cm` crashes
+with "baseDir is null" on Windows).
 """
 import os
 import shutil
@@ -16,35 +16,35 @@ class ExportError(Exception):
 
 
 def _rel(path, start):
-    """Chemin relatif a `start` (evite d'envoyer a cm un chemin absolu avec accents et espaces)."""
+    """Path relative to `start` (avoids sending cm an absolute path with accents and spaces)."""
     try:
         return os.path.relpath(path, start)
-    except ValueError:                      # autre disque sous Windows
+    except ValueError:                      # different drive on Windows
         return os.path.abspath(path)
 
 
 def export_json(cml_path, json_path, template, cm="cm"):
     exe = shutil.which(cm)
     if not exe:
-        raise ExportError(f"commande '{cm}' introuvable dans le PATH (Context Mapper CLI).")
-    for label, p in (("fichier CML", cml_path), ("gabarit Freemarker", template)):
+        raise ExportError(f"command '{cm}' not found in the PATH (Context Mapper CLI).")
+    for label, p in (("CML file", cml_path), ("Freemarker template", template)):
         if not os.path.isfile(p):
-            raise ExportError(f"{label} introuvable : {p}")
+            raise ExportError(f"{label} not found: {p}")
 
     out_dir = os.path.dirname(os.path.abspath(json_path))
     os.makedirs(out_dir, exist_ok=True)
-    if os.path.exists(json_path):           # jamais reutiliser un ancien JSON si cm echoue
+    if os.path.exists(json_path):           # never reuse an old JSON if cm fails
         os.remove(json_path)
 
     cwd = os.path.dirname(os.path.abspath(template))
 
-    # `cm generate` accepte un CML invalide (code 0, aucun message) : on valide d'abord.
-    # `cm validate` rend aussi 0 en cas d'erreur, on lit donc ses lignes « ERROR ».
+    # `cm generate` accepts an invalid CML (code 0, no message): we validate first.
+    # `cm validate` also returns 0 on error, so we read its "ERROR" lines.
     v = subprocess.run([exe, "validate", "-i", _rel(cml_path, cwd)], cwd=cwd,
                        capture_output=True, text=True, encoding="utf-8", errors="replace")
-    erreurs = [l.strip() for l in (v.stdout + v.stderr).splitlines() if l.strip().startswith("ERROR")]
-    if erreurs:
-        raise ExportError("CML invalide (cm validate) :\n" + "\n".join(erreurs))
+    errors = [l.strip() for l in (v.stdout + v.stderr).splitlines() if l.strip().startswith("ERROR")]
+    if errors:
+        raise ExportError("Invalid CML (cm validate):\n" + "\n".join(errors))
 
     cmd = [exe, "generate",
            "-i", _rel(cml_path, cwd),
@@ -54,5 +54,5 @@ def export_json(cml_path, json_path, template, cm="cm"):
            "-f", os.path.basename(json_path)]
     r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, encoding="utf-8", errors="replace")
     if not os.path.isfile(json_path):
-        raise ExportError("cm n'a pas produit le JSON.\n" + (r.stdout + r.stderr).strip())
+        raise ExportError("cm did not produce the JSON.\n" + (r.stdout + r.stderr).strip())
     return json_path

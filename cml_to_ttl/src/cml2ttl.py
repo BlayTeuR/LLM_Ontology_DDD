@@ -1,18 +1,18 @@
-"""CML -> artefact OWL (Turtle), a partir du JSON exporte par le parseur officiel.
+"""CML -> OWL artifact (Turtle), from the JSON exported by the official parser.
 
     cm generate -i insurance.cml -g generic -t cm-probe/export-json.ftl -o output_cml/json -f insurance.json
     python src/cml2ttl.py output_cml/json/insurance.json -o insurance.ttl
 
-Conversion seule : il ne faut que rdflib et iri.py. L'option --validate (SHACL, puis HermiT)
-n'est pas disponible : validate_artifact.py n'existe pas. La coherence logique se verifie
-avec reasoner/reason.py. 
+Conversion only: just rdflib and iri.py are needed. The --validate option (SHACL, then HermiT)
+is not available: validate_artifact.py does not exist. Logical consistency is checked
+with reasoner/reason.py.
 
-Exige Java.
+Requires Java.
 
-Le JSON est la seule entree ; les IRI viennent de iri.mint ; rien n'est devine.
-Tout ce qui ne peut pas etre converti est SIGNALE (avertissements), jamais jete
-en silence ; ce qui rend l'artefact incoherent est une ERREUR.
-Pas de numero de ligne : le generateur ne les expose pas (ddd:sourceLine absent).
+The JSON is the only input; IRIs come from iri.mint; nothing is guessed.
+Anything that cannot be converted is REPORTED (warnings), never silently dropped;
+whatever makes the artifact inconsistent is an ERROR.
+No line number: the generator does not expose them (ddd:sourceLine absent).
 """
 import argparse
 import json
@@ -26,13 +26,13 @@ import iri
 
 D = iri.D
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)       # racine du projet (parent de src/)
+ROOT = os.path.dirname(HERE)       # project root (parent of src/)
 SUBDOMAIN = {"CORE_DOMAIN": D.CoreDomain, "SUPPORTING_DOMAIN": D.SupportingSubdomain,
              "GENERIC_SUBDOMAIN": D.GenericSubdomain}
 ROLE = {"OHS": D.OpenHostService, "PL": D.PublishedLanguage,
         "ACL": D.AnticorruptionLayer, "CF": D.Conformist}
-# kind (JSON) -> (classe, propriete qui relie l'agregat au terme)
-UNSET = {"", "UNDEFINED"}      # valeur par defaut de cm quand rien n'est ecrit
+UNSET = {"", "UNDEFINED"}      # cm's default value when nothing is written
+# kind (JSON) -> (class, property linking the aggregate to the term)
 TERM = {"value_object": (D.ValueObject, D.containsValueObject),
         "domain_event": (D.DomainEvent, D.containsDomainEvent)}
 META = os.path.join(os.path.dirname(ROOT), "metamodel") 
@@ -47,13 +47,13 @@ def build(j):
     g.bind("ddd", D)
     src, seen = os.path.basename(j["file"].replace("\\", "/")), {}
     rep = {"counts": Counter(), "warnings": []}
-    terms, aggs = {}, {}          # (bc, agg, objet) -> IRI ; (bc, agg) -> IRI
-    refs = []                     # references a resoudre une fois tous les termes crees
+    terms, aggs = {}, {}          # (bc, agg, object) -> IRI ; (bc, agg) -> IRI
+    refs = []                     # references to resolve once all terms are created
     bc_names = {b["name"] for b in j["bounded_contexts"]}
 
     def node(uri, cls, name):
         if uri in seen:
-            raise BuildError(f"'{name}' et '{seen[uri]}' produisent la meme IRI : {uri}")
+            raise BuildError(f"'{name}' and '{seen[uri]}' produce the same IRI: {uri}")
         seen[uri] = name
         u = URIRef(uri)
         g.add((u, RDF.type, cls))
@@ -65,14 +65,14 @@ def build(j):
         return u
 
     if j["imports"]:
-        rep["warnings"].append(f"{len(j['imports'])} import(s) NON suivis (exporter chaque fichier "
-                               f"separement) : {', '.join(j['imports'])}")
+        rep["warnings"].append(f"{len(j['imports'])} import(s) NOT followed (export each file "
+                               f"separately): {', '.join(j['imports'])}")
 
     for d in j["domains"]:
         du = node(iri.mint("domain", d["name"]), D.Domain, d["name"])
         for s in d["subdomains"]:
             if s["type"] not in SUBDOMAIN:
-                rep["warnings"].append(f"sous-domaine {s['name']} : type '{s['type']}' inconnu -> Subdomain")
+                rep["warnings"].append(f"subdomain {s['name']}: unknown type '{s['type']}' -> Subdomain")
             g.add((du, D.hasSubdomain,
                    node(iri.mint("subdomain", s["name"]), SUBDOMAIN.get(s["type"], D.Subdomain), s["name"])))
 
@@ -93,18 +93,18 @@ def build(j):
             g.add((b, D.hasAggregate, au))
             if a["owner"]:
                 if a["owner"] not in bc_names:
-                    rep["warnings"].append(f"{bn}/{a['name']} : owner '{a['owner']}' n'est pas un BoundedContext de ce fichier")
+                    rep["warnings"].append(f"{bn}/{a['name']}: owner '{a['owner']}' is not a BoundedContext of this file")
                 g.add((au, D.ownedBy, URIRef(iri.mint("bc", a["owner"]))))
             for x in a["responsibilities"]:
                 g.add((au, D.responsibility, Literal(x)))
             for o in a["objects"]:
                 if o["kind"] == "other":
-                    rep["warnings"].append(f"{bn}/{a['name']}/{o['name']} : Enum, Trait, DTO ou autre "
-                                           f"objet sans equivalent V0 -> ignore")
+                    rep["warnings"].append(f"{bn}/{a['name']}/{o['name']}: Enum, Trait, DTO or other "
+                                           f"object with no V0 equivalent -> ignored")
                     continue
                 if o["kind"] == "entity":
                     if o["root"] is None:
-                        raise BuildError(f"{bn}/{a['name']}/{o['name']} : propriete aggregateRoot absente")
+                        raise BuildError(f"{bn}/{a['name']}/{o['name']}: aggregateRoot property missing")
                     cls, link = (D.RootEntity if o["root"] else D.Entity), D.containsEntity
                 else:
                     cls, link = TERM[o["kind"]]
@@ -124,11 +124,11 @@ def build(j):
     for mu, m, where in refs:
         if m["target_bc"] and m["target_aggregate"]:
             tu = terms.get((m["target_bc"], m["target_aggregate"], m["target"]))
-        else:                                              # proprietaire inconnu : par le nom, si sans ambiguite
+        else:                                              # unknown owner: by name, if unambiguous
             tu = by_name[m["target"]][0] if len(by_name[m["target"]]) == 1 else None
         if tu is None:
-            rep["warnings"].append(f"{where} : cible '{m['target']}' non resolue (Enum/DTO ignore, "
-                                   f"ou nom ambigu) -> pas de ddd:refersTo")
+            rep["warnings"].append(f"{where}: target '{m['target']}' unresolved (Enum/DTO ignored, "
+                                   f"or ambiguous name) -> no ddd:refersTo")
         else:
             g.add((mu, D.refersTo, tu))
 
@@ -154,14 +154,14 @@ def build(j):
         for key, prop in (("upstream_roles", D.hasUpstreamRole), ("downstream_roles", D.hasDownstreamRole)):
             for abbr in sorted(r[key]):
                 if abbr not in ROLE:
-                    raise BuildError(f"relation {up} -> {down} : role '{abbr}' inconnu (attendu : {sorted(ROLE)})")
+                    raise BuildError(f"relationship {up} -> {down}: unknown role '{abbr}' (expected: {sorted(ROLE)})")
                 g.add((u, prop, node(str(u) + "/" + abbr, ROLE[abbr], None)))
         for ag in r["exposes_aggregates"]:
             if (up, ag) in aggs:
                 g.add((u, D.exposesAggregate, aggs[(up, ag)]))
             else:
-                rep["warnings"].append(f"relation {up} -> {down} : exposedAggregates '{ag}' "
-                                       f"n'est pas un agregat de {up}")
+                rep["warnings"].append(f"relationship {up} -> {down}: exposedAggregates '{ag}' "
+                                       f"is not an aggregate of {up}")
         return u
 
     for cm in j["context_maps"]:
@@ -178,40 +178,40 @@ def build(j):
 
 
 def print_report(g, rep, path):
-    """Resume affiche apres ecriture : taille, noeuds par classe, avertissements."""
-    print(f"{path} : {len(g)} triplets  (base IRI : {iri.BASE})")
-    print("  noeuds :", ", ".join(f"{k}={v}" for k, v in sorted(rep["counts"].items())))
+    """Summary printed after writing: size, nodes per class, warnings."""
+    print(f"{path}: {len(g)} triples  (base IRI: {iri.BASE})")
+    print("  nodes:", ", ".join(f"{k}={v}" for k, v in sorted(rep["counts"].items())))
     for w in rep["warnings"]:
-        print("  AVERTISSEMENT :", w)
+        print("  WARNING:", w)
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("json")
     ap.add_argument("-o", "--out", required=True)
-    ap.add_argument("--validate", action="store_true", help="valide aussi l'artefact (SHACL, puis HermiT)")
-    ap.add_argument("--no-hermit", action="store_true", help="avec --validate : saute HermiT (pas de Java)")
+    ap.add_argument("--validate", action="store_true", help="also validate the artifact (SHACL, then HermiT)")
+    ap.add_argument("--no-hermit", action="store_true", help="with --validate: skip HermiT (no Java)")
     a = ap.parse_args()
     try:
         g, rep = build(json.load(open(a.json, encoding="utf-8")))
     except (BuildError, KeyError, ValueError) as e:
-        print("ERREUR :", f"champ manquant ou invalide dans le JSON : {e}" if isinstance(e, KeyError) else e,
+        print("ERROR:", f"missing or invalid field in the JSON: {e}" if isinstance(e, KeyError) else e,
               file=sys.stderr)
         return 1
     g.serialize(a.out, format="turtle")
     print_report(g, rep, a.out)
     if not a.validate:
         return 0
-    import validate_artifact as va          # charge seulement si demande
+    import validate_artifact as va          # loaded only when requested
     findings = va.validate(va.load(os.path.join(META, "ddd-metamodel.ttl")),
                            va.load(os.path.join(META, "shapes.ttl")), g,
                            hermit=not a.no_hermit)
     if findings:
-        print(f"INVALIDE ({findings[0]['stage']}) :")
+        print(f"INVALID ({findings[0]['stage']}):")
         for f in findings:
             print("  -", va.format_finding(f))
         return 1
-    print("VALIDE : vocabulaire et SHACL" + ("" if a.no_hermit else " et HermiT") + " passent.")
+    print("VALID: vocabulary and SHACL" + ("" if a.no_hermit else " and HermiT") + " pass.")
     return 0
 
 

@@ -1,19 +1,19 @@
 <#-- ============================================================
-  EXPORT JSON : gabarit Freemarker pour `cm generate -g generic`.
-  Aucune logique de mapping : on recopie ce que le CML dit. Toute interpretation
-  (valeur UNDEFINED, roles, types) est faite par cml2ttl.py.
-  Les noms de proprietes utilises ont ete CONFIRMES sur insurance.cml (CLI 6.12.0)
-  par les sondes de cm-probe/ : contextMap.type et .state, bc.type,
+  EXPORT JSON: Freemarker template for `cm generate -g generic`.
+  No mapping logic: it copies what the CML says. All interpretation
+  (UNDEFINED value, roles, types) is done by cml2ttl.py.
+  The property names used were CONFIRMED on insurance.cml (CLI 6.12.0)
+  by the probes in cm-probe/: contextMap.type and .state, bc.type,
   bc.implementationTechnology, bc.domainVisionStatement, bc.responsibilities,
   a.owner, a.responsibilities, o.attributes, o.references, r.implementationTechnology,
   r.upstreamExposedAggregates.
-  La cible d'une reference (domainObjectType.eContainer()) reste entouree d'un
-  <#attempt> : elle vaut null si elle n'est pas resolue, et le mapper retrouve alors
-  la cible par son nom.
-  "type" d'un BC vaut "UNDEFINED" quand il n'est pas ecrit dans le CML.
-  "root": null signifie que la propriete aggregateRoot n'existe pas : le mapper
-  Python doit alors s'arreter, pas supposer "faux".
-  Usage ex sur insurance.cml:
+  The target of a reference (domainObjectType.eContainer()) stays wrapped in an
+  <#attempt>: it is null when unresolved, and the mapper then finds
+  the target by its name.
+  A BC's "type" is "UNDEFINED" when it is not written in the CML.
+  "root": null means the aggregateRoot property does not exist: the Python
+  mapper must then stop, not assume "false".
+  Example usage on insurance.cml:
     cm generate -i insurance.cml -g generic -t cm-probe/export-json.ftl -o output_cml/json -f insurance.json
 ============================================================ -->
 {

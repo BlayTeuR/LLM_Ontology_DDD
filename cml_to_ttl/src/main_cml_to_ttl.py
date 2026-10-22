@@ -1,13 +1,13 @@
-"""CML -> JSON -> TTL en une commande.
+"""CML -> JSON -> TTL in a single command.
 
-    python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml     (depuis la racine du depot)
+    python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml     (from the repository root)
 
-    cml_to_ttl/output_cml/json/insurance.json   (etape 1 : parseur officiel, cml_to_json.py)
-    cml_to_ttl/output_cml/ttl/insurance.ttl     (etape 2 : metamodele OWL, cml2ttl.py)
+    cml_to_ttl/output_cml/json/insurance.json   (step 1: official parser, cml_to_json.py)
+    cml_to_ttl/output_cml/ttl/insurance.ttl     (step 2: OWL metamodel, cml2ttl.py)
 
-Le dossier de sortie se change avec --out. Le gabarit export-json.ftl est lu
-dans cml_to_ttl/cm-probe/, hors de src/. Aucune validation ici : la coherence
-logique se verifie ensuite avec reasoner/reason.py (HermiT).
+The output folder can be changed with --out. The export-json.ftl template is read
+from cml_to_ttl/cm-probe/, outside src/. No validation here: logical consistency
+is checked afterwards with reasoner/reason.py (HermiT).
 """
 import argparse
 import json
@@ -24,9 +24,9 @@ DEFAULT_OUT = os.path.join(ROOT, "output_cml")
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Convertit un fichier .cml en .json puis en .ttl.")
-    ap.add_argument("cml", help="fichier .cml a convertir")
-    ap.add_argument("--out", default=DEFAULT_OUT, help=f"dossier de sortie (defaut : {DEFAULT_OUT})")
+    ap = argparse.ArgumentParser(description="Convert a .cml file to .json, then to .ttl.")
+    ap.add_argument("cml", help=".cml file to convert")
+    ap.add_argument("--out", default=DEFAULT_OUT, help=f"output folder (default: {DEFAULT_OUT})")
     a = ap.parse_args()
 
     stem = os.path.splitext(os.path.basename(a.cml))[0]
@@ -40,10 +40,10 @@ def main():
         with open(json_path, encoding="utf-8") as f:
             g, rep = build(json.load(f))
     except (ExportError, BuildError) as e:
-        print("ERREUR :", e, file=sys.stderr)
+        print("ERROR:", e, file=sys.stderr)
         return 1
     except (KeyError, ValueError) as e:
-        print(f"ERREUR : JSON inattendu ({e!r}). Verifie que le gabarit est export-json.ftl.",
+        print(f"ERROR: unexpected JSON ({e!r}). Check that the template is export-json.ftl.",
               file=sys.stderr)
         return 1
 

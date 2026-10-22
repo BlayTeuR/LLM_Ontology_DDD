@@ -1,6 +1,6 @@
-// But : Domain et Subdomain (CORE / SUPPORTING / GENERIC), un BC qui implemente deux sous-domaines,
-// un BC de type TEAM (exporte avec bcType TEAM, mais absent de la liste des contextes de la carte),
-// un BC absent de la ContextMap.
+// Goal: Domain and Subdomain (CORE / SUPPORTING / GENERIC), a BC implementing two subdomains,
+// a BC of type TEAM (exported with bcType TEAM, but absent from the map's list of contexts),
+// a BC absent from the ContextMap.
 // EXPECT: BoundedContext=5 ContextMap=1 Domain=2 CoreDomain=2 SupportingSubdomain=1 GenericSubdomain=1 Aggregate=4 RootEntity=4 Attribute=4 refersTo=0 UpstreamDownstreamRelationship=1 OpenHostService=1 PublishedLanguage=1 AnticorruptionLayer=1 implementsPartOf=4
 
 ContextMap DomainsMap {

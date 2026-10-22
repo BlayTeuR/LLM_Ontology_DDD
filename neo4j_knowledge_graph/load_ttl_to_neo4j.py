@@ -1,7 +1,7 @@
-"""TTL -> Neo4j en une commande (depuis la racine du depot).
-    Utilisation : python neo4j_knowledge_graph/load_ttl_to_neo4j.py <fichier.ttl> [--password <mot de passe>]
-    Sans --password, le mot de passe est lu dans NEO4J_PASSWORD (fichier .env).
-    Exemple : python neo4j_knowledge_graph/load_ttl_to_neo4j.py examples/insurance/insurance.ttl
+"""TTL -> Neo4j in a single command (from the repository root).
+    Usage: python neo4j_knowledge_graph/load_ttl_to_neo4j.py <file.ttl> [--password <password>]
+    Without --password, the password is read from NEO4J_PASSWORD (.env file).
+    Example: python neo4j_knowledge_graph/load_ttl_to_neo4j.py examples/insurance/insurance.ttl
 """
 
 import argparse
@@ -18,19 +18,19 @@ DEFAULT_PASSWORD = os.getenv("NEO4J_PASSWORD", "neo4j")  # Default password if n
 URI = "bolt://localhost:7687"
 
 def read_source_files(ttl_path):
-    """Valeurs de ddd:sourceFile présentes dans le TTL, ex. {'insurance.cml'}."""
+    """ddd:sourceFile values present in the TTL, e.g. {'insurance.cml'}."""
     g = Graph()
     g.parse(ttl_path, format="turtle")
     return sorted({str(o) for _, p, o in g if str(p).endswith("sourceFile")})
 
 def replace_source(session, ttl_text, source_files):
-    """Supprime de Neo4j les anciens nœuds de ces fichiers sources, puis importe le TTL à la place (rechargement propre)"""    
+    """Delete from Neo4j the old nodes of these source files, then import the TTL in their place (clean reload)."""
     for f in source_files:
         session.run("MATCH (n) WHERE $f IN n.sourceFile DETACH DELETE n", f=f)
-    # 2. importer le TTL (envoyé comme texte, sans chemin de fichier Docker)
+    # 2. import the TTL (sent as text, without a Docker file path)
     rec = session.run("CALL n10s.rdf.import.inline($rdf, 'Turtle')", rdf=ttl_text).single()
     if rec["terminationStatus"] != "OK":
-        raise RuntimeError(f"Import n10s en échec : {rec['extraInfo']}")
+        raise RuntimeError(f"n10s import failed: {rec['extraInfo']}")
     return rec["triplesLoaded"]
 
 def main():
@@ -41,35 +41,35 @@ def main():
 
     password = args.password or os.getenv("NEO4J_PASSWORD")
     if not password:
-        print("Erreur : mot de passe absent (--password ou NEO4J_PASSWORD).", file=sys.stderr)
+        print("Error: missing password (--password or NEO4J_PASSWORD).", file=sys.stderr)
         return 1
     if not os.path.isfile(args.ttl_file):
-        print(f"Erreur : fichier introuvable : {args.ttl_file}", file=sys.stderr)
+        print(f"Error: file not found: {args.ttl_file}", file=sys.stderr)
         return 1
 
     sources = read_source_files(args.ttl_file)
     if not sources:
-        print("Erreur : aucun ddd:sourceFile dans le TTL, rechargement impossible.", file=sys.stderr)
+        print("Error: no ddd:sourceFile in the TTL, reload impossible.", file=sys.stderr)
         return 1
     with open(args.ttl_file, encoding="utf-8") as f:
         ttl_text = f.read()
 
-    # Tentative de connexion à Neo4j et chargement du fichier TTL
+    # Try to connect to Neo4j and load the TTL file
     with GraphDatabase.driver(URI, auth=("neo4j", password)) as driver:
         try:
             driver.verify_connectivity()
         except Exception as e:
-            print(f"Erreur : connexion à Neo4j impossible (Docker lancé ? mot de passe ?) : {e}",
+            print(f"Error: cannot connect to Neo4j (Docker running? password?): {e}",
                   file=sys.stderr)
             return 1
         try:
             with driver.session() as session:
                 n = replace_source(session, ttl_text, sources)
         except Exception as e:
-            print(f"Erreur pendant le chargement : {e}", file=sys.stderr)
+            print(f"Error during loading: {e}", file=sys.stderr)
             return 1
 
-    print(f"{n} triplets chargés pour {', '.join(sources)}")
+    print(f"{n} triples loaded for {', '.join(sources)}")
     return 0
 
 

@@ -1,4 +1,4 @@
-"""Tests negatifs : injecte des erreurs dans un .ttl valide et verifie que HermiT les detecte."""
+"""Negative tests: inject errors into a valid .ttl and check that HermiT detects them."""
 import os
 import subprocess
 import sys
@@ -14,7 +14,7 @@ REASON = os.path.join(HERE, "reason.py")
 D = Namespace("https://example.org/ddd-metamodel#")
 
 def first(g, cls):
-    """Premier sujet de type cls (tri pour un resultat reproductible)."""
+    """First subject of type cls (sorted for a reproducible result)."""
     return sorted(g.subjects(RDF.type, cls))[0]
 
 
@@ -32,12 +32,12 @@ def aggregate_with_two_roots(g):
     other = next(r for r in roots if (aggregate, D.containsEntity, r) not in g)
     g.add((aggregate, D.containsEntity, other))
 
-# (nom du fichier, description, fonction de mutation, code de sortie attendu)
+# (file name, description, mutation function, expected exit code)
 CASES = [
-    ("00_baseline", "aucune mutation (temoin)", None, 0),
-    ("01_entity_valueobject", "une Entity est aussi un ValueObject", entity_is_also_value_object, 1),
-    ("02_bc_aggregate", "un BoundedContext est aussi un Aggregate", bounded_context_is_also_aggregate, 1),
-    ("03_two_roots", "un Aggregate contient deux RootEntity", aggregate_with_two_roots, 1),
+    ("00_baseline", "no mutation (control)", None, 0),
+    ("01_entity_valueobject", "an Entity is also a ValueObject", entity_is_also_value_object, 1),
+    ("02_bc_aggregate", "a BoundedContext is also an Aggregate", bounded_context_is_also_aggregate, 1),
+    ("03_two_roots", "an Aggregate contains two RootEntity", aggregate_with_two_roots, 1),
 ]
 
 def main():
@@ -55,8 +55,8 @@ def main():
                                 capture_output=True, text=True)
         ok = result.returncode == expected
         failures += not ok
-        verdict = {0: "COHERENT", 1: "INCOHERENT"}.get(result.returncode, "ERREUR")
-        print(f"[{'OK' if ok else 'ECART'}] {name:24} {verdict:11} {description}")
+        verdict = {0: "COHERENT", 1: "INCOHERENT"}.get(result.returncode, "ERROR")
+        print(f"[{'OK' if ok else 'MISMATCH'}] {name:24} {verdict:11} {description}")
         if result.returncode not in (0, 1):
             print(result.stderr)
     sys.exit(1 if failures else 0)

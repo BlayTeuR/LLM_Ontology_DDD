@@ -1,21 +1,21 @@
-"""Fabrication des IRI d'instances : UNE seule fonction, partagee par les deux routes.
+"""Minting of instance IRIs: ONE single function, shared by both routes.
 
-Regles (voir aussi le README de la conversation) :
-  - deterministe : memes noms + meme structure => meme IRI, a chaque execution ;
-  - independante du fichier, de la ligne, de l'ordre dans le fichier ;
-  - construite uniquement avec ce qu'on peut ecrire a l'endroit ou l'element est
-    REFERENCE en CML (une BC referencee par son seul nom, un sous-domaine par son
-    seul nom) => pas de segment "domaine" dans l'IRI d'un sous-domaine ;
-  - imbriquee sous le contexte pour ce qui n'a de sens que dans un contexte
-    (agregat, entite, value object, evenement) => les homonymes de deux contextes
-    ont des IRI differentes ;
-  - le TYPE de relation n'est pas dans l'IRI (changer [U,S] en [P] ne doit pas
-    creer un nouveau noeud) ;
-  - relation symetrique : noms tries (A<->B == B<->A) ; relation sans nom :
-    "<amont>--<aval>".
+Rules (see also the README of the conversation):
+  - deterministic: same names + same structure => same IRI, on every run;
+  - independent of the file, the line, and the order within the file;
+  - built only from what can be written where the element is REFERENCED in CML
+    (a BC referenced by its name alone, a subdomain by its name alone)
+    => no "domain" segment in a subdomain's IRI;
+  - nested under the context for whatever only makes sense within a context
+    (aggregate, entity, value object, event) => homonyms in two contexts
+    get different IRIs;
+  - the relationship TYPE is not part of the IRI (changing [U,S] to [P] must not
+    create a new node);
+  - symmetric relationship: sorted names (A<->B == B<->A); unnamed relationship:
+    "<upstream>--<downstream>".
 
-BASE est LA variable de configuration a changer (ou variable d'environnement
-KG_BASE). example.org est reserve (RFC 2606) : valeur de remplacement uniquement.
+BASE is THE configuration variable to change (or the KG_BASE environment
+variable). example.org is reserved (RFC 2606): placeholder value only.
 """
 import os
 from urllib.parse import quote
@@ -26,7 +26,7 @@ BASE = os.environ.get("KG_BASE", "https://example.org/kg/insurance/")
 if not BASE.endswith("/"):
     BASE += "/"
 
-DDD_NS = "https://example.org/ddd-metamodel#"   # idem : a remplacer, une seule fois
+DDD_NS = "https://example.org/ddd-metamodel#"   # same: to be replaced, once only
 D = Namespace(DDD_NS)
 
 KINDS = ("map", "domain", "subdomain", "bc", "rel")
@@ -40,15 +40,15 @@ ROLE_ABBR = {
 
 
 def seg(name: str) -> str:
-    """Un segment d'IRI : tout caractere hors [A-Za-z0-9_.~-] est encode en %XX."""
+    """One IRI segment: every character outside [A-Za-z0-9_.~-] is encoded as %XX."""
     return quote(name, safe="")
 
 
 def mint(kind: str, *path: str) -> str:
     if kind not in KINDS:
-        raise ValueError(f"type d'IRI inconnu : {kind!r} (attendu : {KINDS})")
+        raise ValueError(f"unknown IRI kind: {kind!r} (expected: {KINDS})")
     if not path or any(not p for p in path):
-        raise ValueError(f"segment vide dans {path!r}")
+        raise ValueError(f"empty segment in {path!r}")
     return BASE + kind + "/" + "/".join(seg(p) for p in path)
 
 
@@ -61,9 +61,9 @@ def rel_key(name=None, upstream=None, downstream=None, participants=None) -> str
 
 
 # ----------------------------------------------------------------------------
-# Route LLM : le LLM propose des IRI quelconques ; le pipeline les remplace par
-# les IRI fabriquees ici, a partir des ddd:name et de la structure. Ainsi le
-# LLM ne decide jamais de l'identite d'un noeud.
+# LLM route: the LLM proposes arbitrary IRIs; the pipeline replaces them with
+# the IRIs minted here, from the ddd:name values and the structure. Thus the
+# LLM never decides the identity of a node.
 # ----------------------------------------------------------------------------
 
 _SUBDOMAIN_CLASSES = (D.Subdomain, D.CoreDomain, D.SupportingSubdomain, D.GenericSubdomain)
@@ -80,22 +80,22 @@ def _subjects(g, classes):
 
 
 def remint(g: Graph):
-    """Retourne (graphe_reecrit, mapping ancienne->nouvelle IRI, erreurs).
+    """Return (rewritten_graph, old->new IRI mapping, errors).
 
-    Les erreurs sont formulees pour etre renvoyees au LLM (boucle de correction).
+    The errors are worded so they can be sent back to the LLM (correction loop).
     """
     errors, m = [], {}
 
     def name(n):
         v = g.value(n, D.name)
         if v is None or not str(v).strip():
-            errors.append(f"{n} : ddd:name manquant, impossible de calculer son identite")
+            errors.append(f"{n}: ddd:name missing, cannot compute its identity")
             return None
         return str(v)
 
     def assign(node, iri):
         if node in m and str(m[node]) != iri:
-            errors.append(f"{node} : deux identites possibles ({m[node]} / {iri})")
+            errors.append(f"{node}: two possible identities ({m[node]} / {iri})")
         m[node] = URIRef(iri)
 
     for node in _subjects(g, [D.ContextMap]):
@@ -123,10 +123,10 @@ def remint(g: Graph):
 
     for node in _subjects(g, [D.Aggregate]):
         if node not in m:
-            errors.append(f"{node} : Aggregate rattache a aucun BoundedContext (hasAggregate)")
+            errors.append(f"{node}: Aggregate attached to no BoundedContext (hasAggregate)")
     for node in _subjects(g, [D.Entity, D.RootEntity, D.ValueObject, D.DomainEvent]):
         if node not in m:
-            errors.append(f"{node} : element rattache a aucun Aggregate")
+            errors.append(f"{node}: element attached to no Aggregate")
 
     for rel in _subjects(g, _REL_CLASSES):
         ups, downs = list(g.objects(rel, D.upstream)), list(g.objects(rel, D.downstream))
@@ -140,7 +140,7 @@ def remint(g: Graph):
                 un, dn = name(ups[0]), name(downs[0])
                 key = None if None in (un, dn) else rel_key(own and str(own), un, dn)
         except IndexError:
-            errors.append(f"{rel} : relation sans amont/aval ni participants")
+            errors.append(f"{rel}: relationship with no upstream/downstream nor participants")
             continue
         if key is None:
             continue
@@ -151,13 +151,13 @@ def remint(g: Graph):
                 if abbr:
                     assign(role, m[rel] + "/" + abbr)
                 else:
-                    errors.append(f"{role} : role de type inconnu")
+                    errors.append(f"{role}: role of unknown type")
 
-    # collisions : deux noeuds differents -> meme IRI = vrai doublon
+    # collisions: two different nodes -> same IRI = real duplicate
     seen = {}
     for old, new in m.items():
         if new in seen and seen[new] != old:
-            errors.append(f"doublon : {seen[new]} et {old} auraient la meme identite {new}")
+            errors.append(f"duplicate: {seen[new]} and {old} would have the same identity {new}")
         seen[new] = old
 
     out = Graph()

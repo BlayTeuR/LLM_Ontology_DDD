@@ -1,5 +1,5 @@
-// But : tous les types de relations et de roles (UD, Customer-Supplier nommee, Partnership, SharedKernel,
-// OHS / PL / ACL / CF, relation avec un seul role, exposedAggregates).
+// Goal: all relationship and role types (UD, named Customer-Supplier, Partnership, SharedKernel,
+// OHS / PL / ACL / CF, relationship with a single role, exposedAggregates).
 // EXPECT: BoundedContext=6 ContextMap=1 Aggregate=6 RootEntity=6 Attribute=6 refersTo=0 UpstreamDownstreamRelationship=3 CustomerSupplierRelationship=1 Partnership=1 SharedKernel=1 OpenHostService=2 PublishedLanguage=2 AnticorruptionLayer=1 Conformist=1 exposesAggregate=2
 
 ContextMap RelationshipsMap {

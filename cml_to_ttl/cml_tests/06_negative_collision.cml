@@ -1,6 +1,6 @@
-// But (NEGATIF) : deux relations SANS nom, meme amont et meme aval -> meme IRI "rel/Orders--Billing".
-// Le convertisseur doit refuser et dire de donner un nom aux relations.
-// EXPECT: ERROR meme IRI
+// Goal (NEGATIVE): two UNNAMED relationships, same upstream and same downstream -> same IRI "rel/Orders--Billing".
+// The converter must refuse and tell to give the relationships a name.
+// EXPECT: ERROR same IRI
 
 ContextMap CollisionMap {
 	type = SYSTEM_LANDSCAPE
