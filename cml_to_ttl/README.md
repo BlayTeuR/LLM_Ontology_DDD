@@ -30,9 +30,9 @@ Output: `cml_to_ttl/output_cml/json/insurance.json`, then `cml_to_ttl/output_cml
 | `src/iri.py` | Deterministic IRI generation |
 | `src/run_cml_examples.py` | Converter test: compares `cml_tests/*.cml` to their `// EXPECT:` header |
 
-The Python scripts import each other, so they must stay together in `src/`. Paths to the template, tests and outputs are resolved from `cml_to_ttl/` (the parent of `src/`). The metamodel (`ddd-metamodel.ttl`) and the SHACL shapes (`shapes.ttl`) live in [`../metamodel/`](../metamodel); the converter does not read them during a conversion (only the `--validate` option, not available yet, does).
+The Python scripts import each other, so they must stay together in `src/`. Paths to the template, tests and outputs are resolved from `cml_to_ttl/` (the parent of `src/`). The metamodel (`ddd-metamodel.ttl`) and the SHACL shapes (`shapes.ttl`) live in [`../metamodel/`](../metamodel); the converter does not read them during a conversion.
 
-Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is not available yet: `validate_artifact.py` and `check_vocab.py` do not exist, so `cml2ttl.py --validate` does not work.
+Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is not wired yet.
 
 ## What is converted
 

@@ -3,8 +3,7 @@
     cm generate -i insurance.cml -g generic -t cm-probe/export-json.ftl -o output_cml/json -f insurance.json
     python src/cml2ttl.py output_cml/json/insurance.json -o insurance.ttl
 
-Conversion only: just rdflib and iri.py are needed. The --validate option (SHACL, then HermiT)
-is not available: validate_artifact.py does not exist. Logical consistency is checked
+Conversion only: just rdflib and iri.py are needed. Logical consistency is checked
 with reasoner/reason.py.
 
 Requires Java.
@@ -35,8 +34,6 @@ UNSET = {"", "UNDEFINED"}      # cm's default value when nothing is written
 # kind (JSON) -> (class, property linking the aggregate to the term)
 TERM = {"value_object": (D.ValueObject, D.containsValueObject),
         "domain_event": (D.DomainEvent, D.containsDomainEvent)}
-META = os.path.join(os.path.dirname(ROOT), "metamodel") 
-
 
 class BuildError(Exception):
     pass
@@ -189,8 +186,6 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("json")
     ap.add_argument("-o", "--out", required=True)
-    ap.add_argument("--validate", action="store_true", help="also validate the artifact (SHACL, then HermiT)")
-    ap.add_argument("--no-hermit", action="store_true", help="with --validate: skip HermiT (no Java)")
     a = ap.parse_args()
     try:
         g, rep = build(json.load(open(a.json, encoding="utf-8")))
@@ -200,18 +195,6 @@ def main():
         return 1
     g.serialize(a.out, format="turtle")
     print_report(g, rep, a.out)
-    if not a.validate:
-        return 0
-    import validate_artifact as va          # loaded only when requested
-    findings = va.validate(va.load(os.path.join(META, "ddd-metamodel.ttl")),
-                           va.load(os.path.join(META, "shapes.ttl")), g,
-                           hermit=not a.no_hermit)
-    if findings:
-        print(f"INVALID ({findings[0]['stage']}):")
-        for f in findings:
-            print("  -", va.format_finding(f))
-        return 1
-    print("VALID: vocabulary and SHACL" + ("" if a.no_hermit else " and HermiT") + " pass.")
     return 0
 
 
