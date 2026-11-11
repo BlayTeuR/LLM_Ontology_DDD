@@ -8,5 +8,19 @@ python-dotenv>=1.0
 # Reasoner (HermiT)
 owlready2>=0.51
 
-# Optional validation (cml2ttl.py --validate)
-# pyshacl
+# CML -> TTL converter
+rdflib>=7.0
+
+# Loading into Neo4j
+neo4j>=5.0
+
+python-dotenv>=1.0
+
+# Reasoner (HermiT)
+owlready2>=0.51
+
+# SHACL validation
+pyshacl
+
+# LLM (OpenAI)
+openai>=1.0
