@@ -1,7 +1,7 @@
 // Goal: Domain and Subdomain (CORE / SUPPORTING / GENERIC), a BC implementing two subdomains,
-// a BC of type TEAM (exported with bcType TEAM, but absent from the map's list of contexts),
+// a BC of type TEAM (exported as a ddd:Team, so it is not a BoundedContext),
 // a BC absent from the ContextMap.
-// EXPECT: BoundedContext=5 ContextMap=1 Domain=2 CoreDomain=2 SupportingSubdomain=1 GenericSubdomain=1 Aggregate=4 RootEntity=4 Attribute=4 refersTo=0 UpstreamDownstreamRelationship=1 OpenHostService=1 PublishedLanguage=1 AnticorruptionLayer=1 implementsPartOf=4
+// EXPECT: BoundedContext=4 Team=1 ContextMap=1 Domain=2 CoreDomain=2 SupportingSubdomain=1 GenericSubdomain=1 Aggregate=4 RootEntity=4 Attribute=4 refersTo=0 GenericUpstreamDownstreamRelationship=1 OpenHostService=1 PublishedLanguage=1 AnticorruptionLayer=1 implementsPartOf=4
 
 ContextMap DomainsMap {
 	type = SYSTEM_LANDSCAPE

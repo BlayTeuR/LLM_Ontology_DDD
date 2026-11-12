@@ -1,0 +1,15 @@
+// Goal: a Team (BoundedContext of type TEAM) that owns an aggregate: it becomes a ddd:Team node, not a second
+// BoundedContext, and ddd:ownedBy points to it.
+// EXPECT: BoundedContext=1 Team=1 Aggregate=1 RootEntity=1 Attribute=1 refersTo=0 ownedBy=1
+
+BoundedContext OrderContext {
+	Aggregate Orders {
+		owner OrderTeam
+		Entity Order {
+			aggregateRoot
+			String number
+		}
+	}
+}
+
+BoundedContext OrderTeam { type TEAM }
