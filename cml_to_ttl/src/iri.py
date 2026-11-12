@@ -29,7 +29,7 @@ if not BASE.endswith("/"):
 DDD_NS = "https://example.org/ddd-metamodel#"   # same: to be replaced, once only
 D = Namespace(DDD_NS)
 
-KINDS = ("map", "domain", "subdomain", "bc", "rel")
+KINDS = ("map", "domain", "subdomain", "bc", "team", "rel")
 
 ROLE_ABBR = {
     D.OpenHostService: "OHS",
@@ -68,8 +68,8 @@ def rel_key(name=None, upstream=None, downstream=None, participants=None) -> str
 
 _SUBDOMAIN_CLASSES = (D.Subdomain, D.CoreDomain, D.SupportingSubdomain, D.GenericSubdomain)
 _REL_CLASSES = (D.Partnership, D.SharedKernel, D.UpstreamDownstreamRelationship,
-                D.CustomerSupplierRelationship, D.SymmetricRelationship,
-                D.BoundedContextRelationship)
+                D.GenericUpstreamDownstreamRelationship, D.CustomerSupplierRelationship,
+                D.SymmetricRelationship, D.BoundedContextRelationship)
 
 
 def _subjects(g, classes):
@@ -104,6 +104,8 @@ def remint(g: Graph):
         if (n := name(node)): assign(node, mint("domain", n))
     for node in _subjects(g, _SUBDOMAIN_CLASSES):
         if (n := name(node)): assign(node, mint("subdomain", n))
+    for node in _subjects(g, [D.Team]):
+        if (n := name(node)): assign(node, mint("team", n))
 
     bcs = _subjects(g, [D.BoundedContext])
     for bc in bcs:

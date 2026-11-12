@@ -1,0 +1,55 @@
+@prefix ddd:  <https://example.org/ddd-metamodel#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+# =====================================================================
+#  DDD Conflict module -- output layer of the method (not part of DDD)
+#  Describes the conflicts detected between elements of two Bounded
+#  Contexts. Kept apart from ddd-metamodel.ttl because Kapferer's
+#  metamodel has no such concept. The terms keep the ddd: namespace.
+#
+#  NOTE: owl:imports is declarative. The pipeline (reason.py,
+#        validate_shacl.py) merges the files itself and never fetches
+#        the imported IRI; the placeholder IRI would not resolve.
+# =====================================================================
+
+<https://example.org/ddd-conflict> a owl:Ontology ;
+    owl:versionIRI <https://example.org/ddd-conflict/0.1.0> ;
+    owl:imports <https://example.org/ddd-metamodel> ;
+    rdfs:label "DDD Conflict module" ;
+    rdfs:comment "Conflict layer of the method: detected conflicts, their evidence, status and origin." .
+
+ddd:Conflict a owl:Class ;
+    rdfs:label "Conflict" ;
+    rdfs:comment "Conflict detected between elements of two BCs (or within a relationship). Produced by a rule (ddd:detectedBy = rule:<id>) or proposed by the LLM (ddd:detectedBy = llm), then validated by a human (ddd:status)." .
+
+# Conflict is disjoint from every class of the core metamodel.
+[] a owl:AllDisjointClasses ; owl:members (
+    ddd:Conflict
+    ddd:ContextMap ddd:BoundedContext ddd:Team ddd:Domain ddd:Subdomain
+    ddd:BoundedContextRelationship ddd:RelationshipRole
+    ddd:Aggregate ddd:Entity ddd:ValueObject ddd:DomainEvent
+    ddd:Attribute ) .
+
+ddd:involves a owl:ObjectProperty ;
+    rdfs:label "involves" ;
+    rdfs:comment "Elements in conflict (BC, Entity, ValueObject, Attribute, relationship...). No range: the type depends on the conflict." ;
+    rdfs:domain ddd:Conflict .
+
+ddd:conflictType a owl:DatatypeProperty ;
+    rdfs:comment "homonym | synonym | relation (closed list checked by SHACL)." ;
+    rdfs:range xsd:string .
+
+ddd:evidence a owl:DatatypeProperty ;
+    rdfs:comment "Human-readable explanation of the conflict: elements compared and observed difference." ;
+    rdfs:range xsd:string .
+
+ddd:status a owl:DatatypeProperty ;
+    rdfs:comment "proposed | validated | rejected (closed list checked by SHACL). A conflict proposed by the LLM stays 'proposed' until human validation." ;
+    rdfs:range xsd:string .
+
+ddd:detectedBy a owl:DatatypeProperty ;
+    rdfs:comment "rule:<id> for a deterministic rule, llm for an LLM proposal." ;
+    rdfs:range xsd:string .

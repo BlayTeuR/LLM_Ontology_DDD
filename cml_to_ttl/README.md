@@ -1,6 +1,6 @@
 # CML → Turtle (OWL) Converter
 
-Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming to the DDD metamodel ([`metamodel/ddd-metamodel.ttl`](../metamodel/ddd-metamodel.ttl), version 0.2.0). No LLM involved: the conversion is deterministic.
+Converts a Context Mapper file (`.cml`) into an OWL artifact (`.ttl`) conforming to the DDD metamodel ([`metamodel/ddd-metamodel.ttl`](../metamodel/ddd-metamodel.ttl), version 0.3.0). No LLM involved: the conversion is deterministic.
 
 ## Requirements
 
@@ -32,7 +32,7 @@ Output: `cml_to_ttl/output_cml/json/insurance.json`, then `cml_to_ttl/output_cml
 
 The Python scripts import each other, so they must stay together in `src/`. Paths to the template, tests and outputs are resolved from `cml_to_ttl/` (the parent of `src/`). The metamodel (`ddd-metamodel.ttl`) and the SHACL shapes (`shapes.ttl`) live in [`../metamodel/`](../metamodel); the converter does not read them during a conversion.
 
-Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is not wired yet.
+Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner) folder (run it on the generated `.ttl`). SHACL validation is run with `reasoner/validate_shacl.py`.
 
 ## What is converted
 
@@ -40,19 +40,20 @@ Consistency checking with HermiT lives in the separate [`reasoner/`](../reasoner
 |---|---|
 | `ContextMap`, `contains` | `ddd:ContextMap`, `showsRelevantContext` |
 | `BoundedContext` | `ddd:BoundedContext` + `domainVisionStatement`, `responsibility` |
-| `type` of a `BoundedContext` (`FEATURE`, `APPLICATION`, `SYSTEM`, `TEAM`) | `ddd:bcType` (a `TEAM` is exported as a `ddd:BoundedContext` with `bcType "TEAM"`, and is not listed in `showsRelevantContext`) |
+| `type` of a `BoundedContext` (`FEATURE`, `APPLICATION`, `SYSTEM`) | `ddd:bcType` |
+| `BoundedContext` of `type TEAM` | `ddd:Team` (not a `ddd:BoundedContext`; its content, if any, is reported as a warning and ignored) |
 | `implementationTechnology` (on a `BoundedContext` or a relationship) | `ddd:implementationTechnology` |
 | `type` / `state` of a `ContextMap` | `ddd:contextMapType` (`SYSTEM_LANDSCAPE`, `ORGANIZATIONAL`) / `ddd:contextMapState` (`AS_IS`, `TO_BE`) |
 | `Domain`, `Subdomain` (CORE / SUPPORTING / GENERIC) | `ddd:Domain`, `CoreDomain` / `SupportingSubdomain` / `GenericSubdomain` |
 | `Aggregate` | `ddd:Aggregate` |
-| `owner` of an `Aggregate` | `ddd:ownedBy` (towards the `TEAM` bounded context) |
+| `owner` of an `Aggregate` | `ddd:ownedBy` (towards the `ddd:Team`; a warning if the owner is not a team of the file) |
 | `Entity` (`aggregateRoot` or not), `ValueObject`, `DomainEvent` | `RootEntity` / `Entity`, `ValueObject`, `DomainEvent` |
 | attribute (`String name`), reference (`- Type name`) | `ddd:Attribute`; a reference additionally carries `ddd:refersTo` pointing to the target term |
-| `[U]->[D]` (+ `[S]`/`[C]`) | `UpstreamDownstreamRelationship` (`CustomerSupplierRelationship`) |
+| `[U]->[D]` (+ `[S]`/`[C]`) | `GenericUpstreamDownstreamRelationship` (`CustomerSupplierRelationship` when `[S]`/`[C]`) |
 | `[P]<->[P]`, `[SK]<->[SK]` | `Partnership`, `SharedKernel` |
 | roles `OHS`, `PL`, `ACL`, `CF` | `OpenHostService`, `PublishedLanguage`, `AnticorruptionLayer`, `Conformist` |
 | `exposedAggregates` | `ddd:exposesAggregate` |
 
-Not converted (reported, or absent from the JSON): Enum / Trait / DTO (warning), `import` (warning: export each file separately), line numbers, and elements absent from metamodel 0.2.0 (`knowledgeLevel`, `useCases`, `downstreamRights`, operations, etc.).
+Not converted (reported, or absent from the JSON): Enum / Trait / DTO (warning), `import` (warning: export each file separately), line numbers, and elements absent from metamodel 0.3.0 (`knowledgeLevel`, `useCases`, `downstreamRights`, operations, etc.).
 
 An invalid `.cml` is rejected before conversion: `cm generate` accepts it silently, so `cml_to_json.py` first runs `cm validate` and stops on any `ERROR`.

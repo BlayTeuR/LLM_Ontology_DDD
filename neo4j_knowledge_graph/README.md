@@ -42,5 +42,5 @@ For `insurance.cml`: `["insurance.cml"]`, 110 nodes.
 - `sourceFile` is stored as a list (`handleMultival: "ARRAY"`).
 - To remove the loaded data, use `MATCH (n) WHERE n.sourceFile IS NOT NULL DETACH DELETE n`. Do not delete every node: this would also delete the n10s configuration node.
 - There is no inference in Neo4j: a `RootEntity` is not also an `Entity` there.
-- The `TEAM` contexts are `:BoundedContext` nodes with `bcType = 'TEAM'`: filter with `WHERE bc.bcType <> 'TEAM'` to count the model contexts.
+- Since metamodel 0.3.0, the teams (CML `type TEAM`) are `:Team` nodes: `:BoundedContext` holds only the model contexts. Artifacts generated with metamodel 0.2.0 stored the teams as `:BoundedContext` nodes: load the regenerated artifact again, the replacement by `sourceFile` removes the old nodes.
 - The reasoner result does not block the loading yet: run the reasoner first (see [`reasoner/`](../reasoner)).

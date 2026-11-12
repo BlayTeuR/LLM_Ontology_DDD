@@ -46,7 +46,7 @@ def build(j):
     rep = {"counts": Counter(), "warnings": []}
     terms, aggs = {}, {}          # (bc, agg, object) -> IRI ; (bc, agg) -> IRI
     refs = []                     # references to resolve once all terms are created
-    bc_names = {b["name"] for b in j["bounded_contexts"]}
+    team_names = {b["name"] for b in j["bounded_contexts"] if b["type"] == "TEAM"}
 
     def node(uri, cls, name):
         if uri in seen:
@@ -74,6 +74,16 @@ def build(j):
                    node(iri.mint("subdomain", s["name"]), SUBDOMAIN.get(s["type"], D.Subdomain), s["name"])))
 
     for bc in j["bounded_contexts"]:
+        if bc["type"] == "TEAM":      # a team is an organizational unit, not a model context
+            node(iri.mint("team", bc["name"]), D.Team, bc["name"])
+            lost = [label for label, value in (("aggregates", bc["aggregates"]), ("implements", bc["implements"]),
+                                               ("responsibilities", bc["responsibilities"]),
+                                               ("domainVisionStatement", bc["domain_vision_statement"]),
+                                               ("implementationTechnology", bc["implementation_technology"]))
+                    if value]
+            if lost:
+                rep["warnings"].append(f"team {bc['name']}: {', '.join(lost)} ignored (a Team has none of these)")
+            continue
         b, bn = node(iri.mint("bc", bc["name"]), D.BoundedContext, bc["name"]), bc["name"]
         if bc["domain_vision_statement"]:
             g.add((b, D.domainVisionStatement, Literal(bc["domain_vision_statement"])))
@@ -89,9 +99,11 @@ def build(j):
             au = aggs[(bn, a["name"])] = node(iri.mint("bc", bn, a["name"]), D.Aggregate, a["name"])
             g.add((b, D.hasAggregate, au))
             if a["owner"]:
-                if a["owner"] not in bc_names:
-                    rep["warnings"].append(f"{bn}/{a['name']}: owner '{a['owner']}' is not a BoundedContext of this file")
-                g.add((au, D.ownedBy, URIRef(iri.mint("bc", a["owner"]))))
+                if a["owner"] in team_names:
+                    g.add((au, D.ownedBy, URIRef(iri.mint("team", a["owner"]))))
+                else:
+                    rep["warnings"].append(f"{bn}/{a['name']}: owner '{a['owner']}' is not a Team of this file "
+                                           f"-> no ddd:ownedBy")
             for x in a["responsibilities"]:
                 g.add((au, D.responsibility, Literal(x)))
             for o in a["objects"]:
@@ -144,7 +156,7 @@ def build(j):
             return u
         up, down = r["upstream"], r["downstream"]
         u = node(iri.mint("rel", iri.rel_key(r["name"], upstream=up, downstream=down)),
-                 D.CustomerSupplierRelationship if r["customer_supplier"] else D.UpstreamDownstreamRelationship,
+                 D.CustomerSupplierRelationship if r["customer_supplier"] else D.GenericUpstreamDownstreamRelationship,
                  r["name"])
         g.add((u, D.upstream, URIRef(iri.mint("bc", up))))
         g.add((u, D.downstream, URIRef(iri.mint("bc", down))))

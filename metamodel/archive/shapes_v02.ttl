@@ -1,0 +1,194 @@
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix ddd: <https://example.org/ddd-metamodel#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# CLOSED-WORLD rules (SHACL): "what is not written does not exist".
+# They complement the OWL metamodel (which describes meaning and infers) for
+# everything that is a count or a mandatory presence. The messages are meant
+# to be read by a human AND sent back to the LLM in the correction loop.
+# =============================================================================
+
+# --- An Aggregate has exactly one RootEntity ----------------------------------
+ddd:AggregateRootShape a sh:NodeShape ;
+    sh:targetClass ddd:Aggregate ;
+    sh:property [
+        sh:path ddd:containsEntity ;
+        sh:qualifiedValueShape [ sh:class ddd:RootEntity ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "Aggregate without a RootEntity: exactly one is required (aggregateRoot in CML)."
+    ] ;
+    sh:property [
+        sh:path ddd:containsEntity ;
+        sh:qualifiedValueShape [ sh:class ddd:RootEntity ] ;
+        sh:qualifiedMaxCount 1 ;
+        sh:message "Aggregate with several RootEntity: only one is allowed."
+    ] .
+
+# --- Every named element has exactly one name ---------------------------------
+ddd:NamedElementShape a sh:NodeShape ;
+    sh:targetClass ddd:ContextMap, ddd:BoundedContext, ddd:Domain, ddd:Subdomain,
+                   ddd:Aggregate, ddd:Entity, ddd:ValueObject, ddd:DomainEvent,
+                   ddd:Attribute ;
+    sh:property [
+        sh:path ddd:name ; sh:minCount 1 ; sh:maxCount 1 ; sh:minLength 1 ;
+        sh:message "Element without a single, non-empty ddd:name (the name carries the identity)."
+    ] .
+
+# --- Mandatory provenance: synchronization depends on it ----------------------
+ddd:ProvenanceShape a sh:NodeShape ;
+    sh:targetSubjectsOf ddd:generatedBy ;
+    sh:property [
+        sh:path ddd:sourceFile ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "Node without a single ddd:sourceFile: a node must belong to exactly one source (otherwise it cannot be updated or removed cleanly)."
+    ] .
+
+# --- Context: typed references -------------------------------------------------
+ddd:BoundedContextShape a sh:NodeShape ;
+    sh:targetClass ddd:BoundedContext ;
+    sh:property [
+        sh:path ddd:domainVisionStatement ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "A BoundedContext has at most one domainVisionStatement, non-empty."
+    ] ;
+    sh:property [
+        sh:path ddd:responsibility ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "A responsibility is a non-empty text."
+    ] ;
+    sh:property [
+        sh:path ddd:implementsPartOf ; sh:class ddd:Subdomain ;
+        sh:message "implementsPartOf must point to an existing Subdomain (unknown or non-imported subdomain?)."
+    ] ;
+    sh:property [
+        sh:path ddd:hasAggregate ; sh:class ddd:Aggregate ;
+        sh:message "hasAggregate must point to an Aggregate."
+    ] ;
+    sh:property [
+        sh:path ddd:implementationTechnology ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "A BoundedContext has at most one implementationTechnology, non-empty."
+    ] ;
+    sh:property [
+        sh:path ddd:bcType ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "FEATURE" "APPLICATION" "SYSTEM" "TEAM" ) ;
+        sh:message "bcType must be FEATURE, APPLICATION, SYSTEM or TEAM (a single value)."
+    ] ;
+    sh:or ( [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ]
+            [ sh:property [ sh:path ddd:hasAggregate ; sh:maxCount 0 ] ] ) ;
+    sh:message "A BoundedContext of type TEAM cannot have an Aggregate." .
+
+ddd:ContextMapShape a sh:NodeShape ;
+    sh:targetClass ddd:ContextMap ;
+    sh:property [
+        sh:path ddd:showsRelevantContext ; sh:class ddd:BoundedContext ;
+        sh:message "The map references an unknown BoundedContext (undefined or not imported)."
+    ] ;
+    sh:property [
+        sh:path ddd:showsRelevantContext ;
+        sh:node [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ] ;
+        sh:message "A BoundedContext of type TEAM (a team) cannot be in showsRelevantContext."
+    ] ;
+    sh:property [
+        sh:path ddd:contextMapType ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "SYSTEM_LANDSCAPE" "ORGANIZATIONAL" ) ;
+        sh:message "contextMapType must be SYSTEM_LANDSCAPE or ORGANIZATIONAL (a single value)."
+    ] ;
+    sh:property [
+        sh:path ddd:contextMapState ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:in ( "AS_IS" "TO_BE" ) ;
+        sh:message "contextMapState must be AS_IS or TO_BE (a single value)."
+    ] ;
+    sh:property [
+        sh:path ddd:showsRelationship ; sh:class ddd:BoundedContextRelationship ;
+        sh:message "showsRelationship must point to a relationship between contexts (BoundedContextRelationship)."
+    ] .
+
+# --- Relationships -------------------------------------------------------------
+ddd:UpstreamDownstreamShape a sh:NodeShape ;
+    sh:targetClass ddd:UpstreamDownstreamRelationship ;
+    sh:property [
+        sh:path ddd:upstream ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:message "An upstream-downstream relationship has exactly one upstream context, which must be a known BoundedContext."
+    ] ;
+    sh:property [
+        sh:path ddd:downstream ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:message "An upstream-downstream relationship has exactly one downstream context, which must be a known BoundedContext."
+    ] ;
+    sh:property [
+        sh:path ddd:upstream ; sh:disjoint ddd:downstream ;
+        sh:message "A context cannot be both upstream and downstream of the same relationship."
+    ] .
+
+ddd:RelationshipTechShape a sh:NodeShape ;
+    sh:targetClass ddd:BoundedContextRelationship ;
+    sh:property [
+        sh:path ddd:implementationTechnology ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "A relationship has at most one implementationTechnology, non-empty."
+    ] .
+
+ddd:ExposesShape a sh:NodeShape ;
+    sh:targetClass ddd:UpstreamDownstreamRelationship ;
+    sh:property [
+        sh:path ddd:exposesAggregate ; sh:class ddd:Aggregate ;
+        sh:message "exposesAggregate must point to a known Aggregate (exposedAggregates in CML)."
+    ] .
+
+ddd:SymmetricShape a sh:NodeShape ;
+    sh:targetClass ddd:SymmetricRelationship ;
+    sh:property [
+        sh:path ddd:hasParticipant ; sh:minCount 2 ; sh:class ddd:BoundedContext ;
+        sh:message "A symmetric relationship links at least two known BoundedContexts."
+    ] .
+
+# --- 0.1.0: attributes --------------------------------------------------------
+# An Attribute belongs to exactly one term (Entity, ValueObject, DomainEvent)
+# and has at most one type (a string as written in CML).
+ddd:AttributeShape a sh:NodeShape ;
+    sh:targetClass ddd:Attribute ;
+    sh:property [
+        sh:path ddd:attributeType ; sh:maxCount 1 ; sh:datatype xsd:string ; sh:minLength 1 ;
+        sh:message "An Attribute has at most one attributeType, non-empty."
+    ] ;
+    sh:property [
+        sh:path ddd:refersTo ; sh:maxCount 1 ;
+        sh:or ( [ sh:class ddd:Entity ] [ sh:class ddd:ValueObject ] [ sh:class ddd:DomainEvent ] ) ;
+        sh:message "refersTo must point to exactly one known term (Entity, ValueObject or DomainEvent): unknown target or of another type."
+    ] ;
+    sh:property [
+        sh:path [ sh:inversePath ddd:hasAttribute ] ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An Attribute must belong to exactly one term (Entity, ValueObject or DomainEvent)."
+    ] .
+
+# --- 0.1.0: conflicts (V0 output) ------------------------------------------------
+# A conflict always involves at least two elements: for a relationship
+# conflict, the relationship AND the faulty BC.
+ddd:ConflictShape a sh:NodeShape ;
+    sh:targetClass ddd:Conflict ;
+    sh:property [
+        sh:path ddd:involves ; sh:minCount 2 ;
+        sh:message "A Conflict involves at least two elements (ddd:involves)."
+    ] ;
+    sh:property [
+        sh:path ddd:conflictType ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "homonym" "synonym" "relation" ) ;
+        sh:message "conflictType is mandatory, single, among: homonym, synonym, relation."
+    ] ;
+    sh:property [
+        sh:path ddd:status ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "proposed" "validated" "rejected" ) ;
+        sh:message "status is mandatory, single, among: proposed, validated, rejected."
+    ] ;
+    sh:property [
+        sh:path ddd:detectedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^(llm|rule:.+)$" ;
+        sh:message "detectedBy is mandatory: 'llm' or 'rule:<identifier>'."
+    ] ;
+    sh:property [
+        sh:path ddd:evidence ; sh:minCount 1 ; sh:minLength 1 ;
+        sh:message "A Conflict must carry readable evidence (elements compared, difference)."
+    ] .
+
+ddd:AggregateOwnerShape a sh:NodeShape ;
+    sh:targetClass ddd:Aggregate ;
+    sh:property [
+        sh:path ddd:ownedBy ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
+        sh:node [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ;
+        sh:message "owner must point to a known BoundedContext of type TEAM (at most one)."
+    ] .

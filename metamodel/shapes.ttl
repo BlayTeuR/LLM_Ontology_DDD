@@ -27,7 +27,7 @@ ddd:AggregateRootShape a sh:NodeShape ;
 
 # --- Every named element has exactly one name ---------------------------------
 ddd:NamedElementShape a sh:NodeShape ;
-    sh:targetClass ddd:ContextMap, ddd:BoundedContext, ddd:Domain, ddd:Subdomain,
+    sh:targetClass ddd:ContextMap, ddd:BoundedContext, ddd:Team, ddd:Domain, ddd:Subdomain,
                    ddd:Aggregate, ddd:Entity, ddd:ValueObject, ddd:DomainEvent,
                    ddd:Attribute ;
     sh:property [
@@ -68,23 +68,15 @@ ddd:BoundedContextShape a sh:NodeShape ;
     ] ;
     sh:property [
         sh:path ddd:bcType ; sh:maxCount 1 ; sh:datatype xsd:string ;
-        sh:in ( "FEATURE" "APPLICATION" "SYSTEM" "TEAM" ) ;
-        sh:message "bcType must be FEATURE, APPLICATION, SYSTEM or TEAM (a single value)."
-    ] ;
-    sh:or ( [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ]
-            [ sh:property [ sh:path ddd:hasAggregate ; sh:maxCount 0 ] ] ) ;
-    sh:message "A BoundedContext of type TEAM cannot have an Aggregate." .
+        sh:in ( "FEATURE" "APPLICATION" "SYSTEM" ) ;
+        sh:message "bcType must be FEATURE, APPLICATION or SYSTEM (a single value)."
+    ] .
 
 ddd:ContextMapShape a sh:NodeShape ;
     sh:targetClass ddd:ContextMap ;
     sh:property [
         sh:path ddd:showsRelevantContext ; sh:class ddd:BoundedContext ;
         sh:message "The map references an unknown BoundedContext (undefined or not imported)."
-    ] ;
-    sh:property [
-        sh:path ddd:showsRelevantContext ;
-        sh:node [ sh:not [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ] ;
-        sh:message "A BoundedContext of type TEAM (a team) cannot be in showsRelevantContext."
     ] ;
     sh:property [
         sh:path ddd:contextMapType ; sh:maxCount 1 ; sh:datatype xsd:string ;
@@ -134,8 +126,8 @@ ddd:ExposesShape a sh:NodeShape ;
 ddd:SymmetricShape a sh:NodeShape ;
     sh:targetClass ddd:SymmetricRelationship ;
     sh:property [
-        sh:path ddd:hasParticipant ; sh:minCount 2 ; sh:class ddd:BoundedContext ;
-        sh:message "A symmetric relationship links at least two known BoundedContexts."
+        sh:path ddd:hasParticipant ; sh:minCount 2 ; sh:maxCount 2 ; sh:class ddd:BoundedContext ;
+        sh:message "A symmetric relationship links exactly two known BoundedContexts."
     ] .
 
 # --- 0.1.0: attributes --------------------------------------------------------
@@ -157,38 +149,11 @@ ddd:AttributeShape a sh:NodeShape ;
         sh:message "An Attribute must belong to exactly one term (Entity, ValueObject or DomainEvent)."
     ] .
 
-# --- 0.1.0: conflicts (V0 output) ------------------------------------------------
-# A conflict always involves at least two elements: for a relationship
-# conflict, the relationship AND the faulty BC.
-ddd:ConflictShape a sh:NodeShape ;
-    sh:targetClass ddd:Conflict ;
-    sh:property [
-        sh:path ddd:involves ; sh:minCount 2 ;
-        sh:message "A Conflict involves at least two elements (ddd:involves)."
-    ] ;
-    sh:property [
-        sh:path ddd:conflictType ; sh:minCount 1 ; sh:maxCount 1 ;
-        sh:in ( "homonym" "synonym" "relation" ) ;
-        sh:message "conflictType is mandatory, single, among: homonym, synonym, relation."
-    ] ;
-    sh:property [
-        sh:path ddd:status ; sh:minCount 1 ; sh:maxCount 1 ;
-        sh:in ( "proposed" "validated" "rejected" ) ;
-        sh:message "status is mandatory, single, among: proposed, validated, rejected."
-    ] ;
-    sh:property [
-        sh:path ddd:detectedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^(llm|rule:.+)$" ;
-        sh:message "detectedBy is mandatory: 'llm' or 'rule:<identifier>'."
-    ] ;
-    sh:property [
-        sh:path ddd:evidence ; sh:minCount 1 ; sh:minLength 1 ;
-        sh:message "A Conflict must carry readable evidence (elements compared, difference)."
-    ] .
-
+# --- Ownership ------------------------------------------------------------------
+# The Conflict rules live in shapes-conflict.ttl (module ddd-conflict.ttl).
 ddd:AggregateOwnerShape a sh:NodeShape ;
     sh:targetClass ddd:Aggregate ;
     sh:property [
-        sh:path ddd:ownedBy ; sh:maxCount 1 ; sh:class ddd:BoundedContext ;
-        sh:node [ sh:property [ sh:path ddd:bcType ; sh:hasValue "TEAM" ] ] ;
-        sh:message "owner must point to a known BoundedContext of type TEAM (at most one)."
+        sh:path ddd:ownedBy ; sh:maxCount 1 ; sh:class ddd:Team ;
+        sh:message "owner must point to a known Team (at most one)."
     ] .

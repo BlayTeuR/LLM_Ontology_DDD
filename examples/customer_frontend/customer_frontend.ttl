@@ -1,0 +1,87 @@
+@prefix ddd: <https://example.org/ddd-metamodel#> .
+
+<https://example.org/kg/insurance/map/CustomerContextMap> a ddd:ContextMap ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "CustomerContextMap" ;
+    ddd:showsRelationship <https://example.org/kg/insurance/rel/Customer_Frontend_Backend_Relationship> ;
+    ddd:showsRelevantContext <https://example.org/kg/insurance/bc/CustomerManagementContext>,
+        <https://example.org/kg/insurance/bc/CustomerSelfServiceContext> ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/city> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "city" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/street> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "street" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> a ddd:RootEntity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/firstname> ;
+    ddd:name "Customer" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer/firstname> a ddd:Attribute ;
+    ddd:attributeType "String" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "firstname" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend> a ddd:Aggregate ;
+    ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "CustomerFrontend" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange> a ddd:RootEntity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/changedAddress> ;
+    ddd:name "CustomerAddressChange" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend/CustomerAddressChange/changedAddress> a ddd:Attribute ;
+    ddd:attributeType "Address" ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "changedAddress" ;
+    ddd:refersTo <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/rel/Customer_Frontend_Backend_Relationship> a ddd:CustomerSupplierRelationship ;
+    ddd:downstream <https://example.org/kg/insurance/bc/CustomerSelfServiceContext> ;
+    ddd:exposesAggregate <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "Customer_Frontend_Backend_Relationship" ;
+    ddd:sourceFile "customer_frontend.cml" ;
+    ddd:upstream <https://example.org/kg/insurance/bc/CustomerManagementContext> .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext> a ddd:BoundedContext ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAggregate <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> ;
+    ddd:name "CustomerManagementContext" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> a ddd:Aggregate ;
+    ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address>,
+        <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "Customers" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> a ddd:Entity ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAttribute <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/city>,
+        <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address/street> ;
+    ddd:name "Address" ;
+    ddd:sourceFile "customer_frontend.cml" .
+
+<https://example.org/kg/insurance/bc/CustomerSelfServiceContext> a ddd:BoundedContext ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:hasAggregate <https://example.org/kg/insurance/bc/CustomerSelfServiceContext/CustomerFrontend> ;
+    ddd:name "CustomerSelfServiceContext" ;
+    ddd:sourceFile "customer_frontend.cml" .
+

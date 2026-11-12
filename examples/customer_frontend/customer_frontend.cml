@@ -1,0 +1,32 @@
+/* Excerpt of the Insurance example (Context Mapper): the customer self-service frontend and the customer backend.
+   Small on purpose: used to illustrate the knowledge graph built in Neo4j. */
+ContextMap CustomerContextMap {
+	contains CustomerManagementContext
+	contains CustomerSelfServiceContext
+
+	CustomerSelfServiceContext [D,C]<-[U,S] CustomerManagementContext : Customer_Frontend_Backend_Relationship {
+		exposedAggregates = Customers
+	}
+}
+
+BoundedContext CustomerManagementContext {
+	Aggregate Customers {
+		Entity Customer {
+			aggregateRoot
+			String firstname
+		}
+		Entity Address {
+			String street
+			String city
+		}
+	}
+}
+
+BoundedContext CustomerSelfServiceContext {
+	Aggregate CustomerFrontend {
+		Entity CustomerAddressChange {
+			aggregateRoot
+			- Address changedAddress
+		}
+	}
+}

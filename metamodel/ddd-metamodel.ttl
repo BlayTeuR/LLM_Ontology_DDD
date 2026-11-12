@@ -7,9 +7,11 @@
 # =====================================================================
 #  DDD Metamodel (strategic + tactical) -- current version
 #  Conceptual source: Kapferer's metamodel (Strategic / Tactic DDD).
-#  Scope: Context Map, Bounded Context, Domain/Subdomain, Context Mapping
-#  relationships and roles, Aggregate / Entity / RootEntity /
-#  ValueObject / DomainEvent, Attribute, Conflict.
+#  Scope: Context Map, Bounded Context, Team, Domain/Subdomain, Context
+#  Mapping relationships and roles, Aggregate / Entity / RootEntity /
+#  ValueObject / DomainEvent, Attribute.
+#  The Conflict layer (output of the method, not DDD) lives in its own
+#  module: ddd-conflict.ttl (same ddd: namespace).
 #
 #  NOTE: the https://example.org/... namespace is a PLACEHOLDER.
 #  NOTE: the AllDifferent axiom is NOT in this file: it is added by the
@@ -17,9 +19,9 @@
 # =====================================================================
 
 <https://example.org/ddd-metamodel> a owl:Ontology ;
-    owl:versionIRI <https://example.org/ddd-metamodel/0.2.0> ;
-    owl:versionInfo "0.2.0 (0.1.0 + ownedBy, bcType, implementationTechnology, contextMapType, contextMapState)" ;
-    owl:priorVersion <https://example.org/ddd-metamodel/0.1.0> ;
+    owl:versionIRI <https://example.org/ddd-metamodel/0.3.0> ;
+    owl:versionInfo "0.3.0 (0.2.0 + Team class, GenericUpstreamDownstreamRelationship, RelationshipRole, covering axioms on every abstract class; Conflict moved to ddd-conflict.ttl)" ;
+    owl:priorVersion <https://example.org/ddd-metamodel/0.2.0> ;
     rdfs:label "DDD Metamodel (strategic + tactical)" ;
     rdfs:comment "OWL 2 DL metamodel of strategic and tactical DDD, derived from Kapferer's metamodel, targeted by artifacts generated from CML or by an LLM." .
 
@@ -43,6 +45,11 @@ ddd:ContextMap a owl:Class ;
 ddd:BoundedContext a owl:Class ;
     rdfs:label "Bounded Context" ;
     ddd:cmlConstruct "BoundedContext" .
+
+ddd:Team a owl:Class ;
+    rdfs:label "Team" ;
+    rdfs:comment "Organizational unit that owns aggregates (CML: a BoundedContext of type TEAM). Not a model context, so it is disjoint from BoundedContext and does not take part in conflict detection. Kapferer models it as a value of the BC type; making it a class is our interpretation." ;
+    ddd:cmlConstruct "TEAM" .
 
 ddd:Domain a owl:Class ;
     rdfs:label "Domain" ;
@@ -76,11 +83,14 @@ ddd:BoundedContextRelationship a owl:Class ;
     owl:equivalentClass [ a owl:Class ;
         owl:unionOf ( ddd:SymmetricRelationship ddd:UpstreamDownstreamRelationship ) ] ;
     rdfs:label "Bounded Context Relationship" ;
-    rdfs:comment "Abstract class: do not instantiate directly, use a subclass." .
+    rdfs:comment "Abstract class (Kapferer), encoded as a covering axiom: every instance is a SymmetricRelationship or an UpstreamDownstreamRelationship. OWL cannot forbid a direct instance, it only infers the subclass. Same pattern for the other abstract classes below." .
 
 ddd:SymmetricRelationship a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:Partnership ddd:SharedKernel ) ] ;
     rdfs:subClassOf ddd:BoundedContextRelationship ;
-    rdfs:label "Symmetric Relationship" .
+    rdfs:label "Symmetric Relationship" ;
+    rdfs:comment "Abstract class: covering axiom over Partnership and SharedKernel." .
 
 ddd:Partnership a owl:Class ;
     rdfs:subClassOf ddd:SymmetricRelationship ;
@@ -93,9 +103,16 @@ ddd:SharedKernel a owl:Class ;
     ddd:cmlConstruct "Shared-Kernel" .
 
 ddd:UpstreamDownstreamRelationship a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:GenericUpstreamDownstreamRelationship ddd:CustomerSupplierRelationship ) ] ;
     rdfs:subClassOf ddd:BoundedContextRelationship ;
     rdfs:label "Upstream-Downstream Relationship" ;
-    rdfs:comment "Generic upstream-downstream relationship (to be instantiated directly when it is not a Customer-Supplier)." ;
+    rdfs:comment "Abstract class: covering axiom over GenericUpstreamDownstreamRelationship and CustomerSupplierRelationship." .
+
+ddd:GenericUpstreamDownstreamRelationship a owl:Class ;
+    rdfs:subClassOf ddd:UpstreamDownstreamRelationship ;
+    rdfs:label "Generic Upstream-Downstream Relationship" ;
+    rdfs:comment "Upstream-downstream relationship that is not declared Customer/Supplier (Kapferer: Generic Upstream/Downstream Relationship)." ;
     ddd:cmlConstruct "Upstream-Downstream" .
 
 ddd:CustomerSupplierRelationship a owl:Class ;
@@ -107,13 +124,25 @@ ddd:CustomerSupplierRelationship a owl:Class ;
 #  Classes: roles in an upstream-downstream relationship
 # ---------------------------------------------------------------------
 
+ddd:RelationshipRole a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:UpstreamRole ddd:DownstreamRole ) ] ;
+    rdfs:label "Relationship Role" ;
+    rdfs:comment "Abstract class (Kapferer): covering axiom over UpstreamRole and DownstreamRole." .
+
 ddd:UpstreamRole a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:PublishedLanguage ddd:OpenHostService ) ] ;
+    rdfs:subClassOf ddd:RelationshipRole ;
     rdfs:label "Upstream Role" ;
-    rdfs:comment "Abstract class: role carried by the upstream context." .
+    rdfs:comment "Abstract class: role carried by the upstream context (covering axiom over PL and OHS)." .
 
 ddd:DownstreamRole a owl:Class ;
+    owl:equivalentClass [ a owl:Class ;
+        owl:unionOf ( ddd:AnticorruptionLayer ddd:Conformist ) ] ;
+    rdfs:subClassOf ddd:RelationshipRole ;
     rdfs:label "Downstream Role" ;
-    rdfs:comment "Abstract class: role carried by the downstream context." .
+    rdfs:comment "Abstract class: role carried by the downstream context (covering axiom over ACL and Conformist). Kapferer allows 0..1 downstream role, but CML accepts several ([D,ACL,CF] is valid), so the upper bound is not encoded." .
 
 ddd:PublishedLanguage a owl:Class ;
     rdfs:subClassOf ddd:UpstreamRole ;
@@ -174,27 +203,23 @@ ddd:Attribute a owl:Class ;
     ddd:cmlConstruct "Attribute" .
 
 # ---------------------------------------------------------------------
-#  Classes: V0 output (detected conflicts, not CML elements)
-# ---------------------------------------------------------------------
-
-ddd:Conflict a owl:Class ;
-    rdfs:label "Conflict" ;
-    rdfs:comment "Conflict detected between elements of two BCs (or within a relationship). Produced by a rule (ddd:detectedBy = rule:<id>) or proposed by the LLM (ddd:detectedBy = llm), then validated by a human (ddd:status)." .
-
-# ---------------------------------------------------------------------
 #  Disjointness
-#  The only real HermiT check in V0 together with domain/range: detects
-#  typing errors on an element.
+#  With domain/range, the real HermiT checks: detects typing errors on
+#  an element. The disjointness of Conflict with these classes is stated
+#  in ddd-conflict.ttl.
 # ---------------------------------------------------------------------
 
 [] a owl:AllDisjointClasses ; owl:members (
-    ddd:ContextMap ddd:BoundedContext ddd:Domain ddd:Subdomain
-    ddd:BoundedContextRelationship ddd:UpstreamRole ddd:DownstreamRole
+    ddd:ContextMap ddd:BoundedContext ddd:Team ddd:Domain ddd:Subdomain
+    ddd:BoundedContextRelationship ddd:RelationshipRole
     ddd:Aggregate ddd:Entity ddd:ValueObject ddd:DomainEvent
-    ddd:Attribute ddd:Conflict ) .
+    ddd:Attribute ) .
 
 [] a owl:AllDisjointClasses ; owl:members ( ddd:CoreDomain ddd:SupportingSubdomain ddd:GenericSubdomain ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:Partnership ddd:SharedKernel ) .
 [] a owl:AllDisjointClasses ; owl:members ( ddd:SymmetricRelationship ddd:UpstreamDownstreamRelationship ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:GenericUpstreamDownstreamRelationship ddd:CustomerSupplierRelationship ) .
+[] a owl:AllDisjointClasses ; owl:members ( ddd:UpstreamRole ddd:DownstreamRole ) .
 [] a owl:AllDisjointClasses ; owl:members ( ddd:PublishedLanguage ddd:OpenHostService ) .
 [] a owl:AllDisjointClasses ; owl:members ( ddd:AnticorruptionLayer ddd:Conformist ) .
 
@@ -235,7 +260,7 @@ ddd:aggregateOf a owl:ObjectProperty ;
 
 ddd:ownedBy a owl:ObjectProperty ;
     rdfs:label "owned by" ;
-    rdfs:domain ddd:Aggregate ; rdfs:range ddd:BoundedContext .
+    rdfs:domain ddd:Aggregate ; rdfs:range ddd:Team .
 
 # --- Domain <-> Subdomain ---
 
@@ -273,13 +298,6 @@ ddd:refersTo a owl:ObjectProperty ;
     rdfs:domain ddd:Attribute ;
     rdfs:range [ a owl:Class ; owl:unionOf ( ddd:Entity ddd:ValueObject ddd:DomainEvent ) ] .
 
-# --- Conflicts ---
-
-ddd:involves a owl:ObjectProperty ;
-    rdfs:label "involves" ;
-    rdfs:comment "Elements in conflict (BC, Entity, ValueObject, Attribute, relationship...). No range: the type depends on the conflict." ;
-    rdfs:domain ddd:Conflict .
-
 # --- Relationships ---
 
 ddd:hasParticipant a owl:ObjectProperty ;
@@ -316,7 +334,7 @@ ddd:name a owl:DatatypeProperty ;
 
 ddd:bcType a owl:DatatypeProperty ;
     rdfs:label "bounded context type" ;
-    rdfs:comment "BC type in CML: FEATURE | APPLICATION | SYSTEM | TEAM (closed list checked by SHACL). TEAM = a team, not a model context." ;
+    rdfs:comment "BC type in CML: FEATURE | APPLICATION | SYSTEM (closed list checked by SHACL). A CML type TEAM is not a BC: it is converted to a ddd:Team." ;
     rdfs:range xsd:string .
 
 ddd:contextMapType a owl:DatatypeProperty ;
@@ -345,24 +363,6 @@ ddd:implementationTechnology a owl:DatatypeProperty ;
 
 ddd:responsibility a owl:DatatypeProperty ;
     rdfs:comment "A responsibility (CML responsibilities), on a BC or an Aggregate. Multi-valued: one value per responsibility." ;
-    rdfs:range xsd:string .
-
-# --- Conflicts: evidence and status ---
-
-ddd:conflictType a owl:DatatypeProperty ;
-    rdfs:comment "homonym | synonym | relation (closed list checked by SHACL)." ;
-    rdfs:range xsd:string .
-
-ddd:evidence a owl:DatatypeProperty ;
-    rdfs:comment "Human-readable explanation of the conflict: elements compared and observed difference." ;
-    rdfs:range xsd:string .
-
-ddd:status a owl:DatatypeProperty ;
-    rdfs:comment "proposed | validated | rejected (closed list checked by SHACL). A conflict proposed by the LLM stays 'proposed' until human validation." ;
-    rdfs:range xsd:string .
-
-ddd:detectedBy a owl:DatatypeProperty ;
-    rdfs:comment "rule:<id> for a deterministic rule, llm for an LLM proposal." ;
     rdfs:range xsd:string .
 
 # --- Provenance (useful to tell the CML route from the LLM route and to trace errors) ---

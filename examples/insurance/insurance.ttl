@@ -112,7 +112,7 @@
         <https://example.org/kg/insurance/bc/DebtCollection/Debts/Dunning> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Debts" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/FinancesTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/FinancesTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/DebtCollection/Debts/Debt/creationDate> a ddd:Attribute ;
@@ -190,19 +190,13 @@
     ddd:name "paymentDeadline" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/bc/FinancesTeam> a ddd:BoundedContext ;
-    ddd:bcType "TEAM" ;
-    ddd:generatedBy "cml-converter" ;
-    ddd:name "FinancesTeam" ;
-    ddd:sourceFile "insurance.cml" .
-
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Policy> ;
     ddd:containsValueObject <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/ContractId> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Contract" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/ContractsTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Contract/Contract/client> a ddd:Attribute ;
@@ -255,7 +249,7 @@
     ddd:containsEntity <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Offers" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/ContractsTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Offers/Offer> a ddd:RootEntity ;
@@ -298,7 +292,7 @@
     ddd:containsValueObject <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/ProductId> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Products" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/ProductsTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/ProductsTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/identifier> a ddd:Attribute ;
@@ -378,18 +372,12 @@
     ddd:name "templateName" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/bc/ProductsTeam> a ddd:BoundedContext ;
-    ddd:bcType "TEAM" ;
-    ddd:generatedBy "cml-converter" ;
-    ddd:name "ProductsTeam" ;
-    ddd:sourceFile "insurance.cml" .
-
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor> ;
     ddd:containsValueObject <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/Risk> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Risks" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/RisksTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/RisksTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/RiskManagementContext/Risks/CustomerRiskFactor> a ddd:RootEntity ;
@@ -432,13 +420,7 @@
     ddd:name "risk" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/bc/RisksTeam> a ddd:BoundedContext ;
-    ddd:bcType "TEAM" ;
-    ddd:generatedBy "cml-converter" ;
-    ddd:name "RisksTeam" ;
-    ddd:sourceFile "insurance.cml" .
-
-<https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext> a ddd:UpstreamDownstreamRelationship ;
+<https://example.org/kg/insurance/rel/CustomerManagementContext--PolicyManagementContext> a ddd:GenericUpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/PolicyManagementContext> ;
     ddd:exposesAggregate <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> ;
     ddd:generatedBy "cml-converter" ;
@@ -483,7 +465,7 @@
     ddd:implementationTechnology "RabbitMQ" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext> a ddd:UpstreamDownstreamRelationship ;
+<https://example.org/kg/insurance/rel/PrintingContext--CustomerManagementContext> a ddd:GenericUpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/CustomerManagementContext> ;
     ddd:exposesAggregate <https://example.org/kg/insurance/bc/PrintingContext/Printing> ;
     ddd:generatedBy "cml-converter" ;
@@ -506,7 +488,7 @@
     ddd:generatedBy "cml-converter" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/rel/PrintingContext--DebtCollection> a ddd:UpstreamDownstreamRelationship ;
+<https://example.org/kg/insurance/rel/PrintingContext--DebtCollection> a ddd:GenericUpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/DebtCollection> ;
     ddd:exposesAggregate <https://example.org/kg/insurance/bc/PrintingContext/Printing> ;
     ddd:generatedBy "cml-converter" ;
@@ -529,7 +511,7 @@
     ddd:generatedBy "cml-converter" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext> a ddd:UpstreamDownstreamRelationship ;
+<https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext> a ddd:GenericUpstreamDownstreamRelationship ;
     ddd:downstream <https://example.org/kg/insurance/bc/PolicyManagementContext> ;
     ddd:exposesAggregate <https://example.org/kg/insurance/bc/PrintingContext/Printing> ;
     ddd:generatedBy "cml-converter" ;
@@ -550,6 +532,21 @@
 
 <https://example.org/kg/insurance/rel/PrintingContext--PolicyManagementContext/PL> a ddd:PublishedLanguage ;
     ddd:generatedBy "cml-converter" ;
+    ddd:sourceFile "insurance.cml" .
+
+<https://example.org/kg/insurance/team/FinancesTeam> a ddd:Team ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "FinancesTeam" ;
+    ddd:sourceFile "insurance.cml" .
+
+<https://example.org/kg/insurance/team/ProductsTeam> a ddd:Team ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "ProductsTeam" ;
+    ddd:sourceFile "insurance.cml" .
+
+<https://example.org/kg/insurance/team/RisksTeam> a ddd:Team ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "RisksTeam" ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerSelfServiceContext> a ddd:BoundedContext ;
@@ -678,18 +675,12 @@
     ddd:name "RiskManagementDomain" ;
     ddd:sourceFile "insurance.cml" .
 
-<https://example.org/kg/insurance/bc/ContractsTeam> a ddd:BoundedContext ;
-    ddd:bcType "TEAM" ;
-    ddd:generatedBy "cml-converter" ;
-    ddd:name "ContractsTeam" ;
-    ddd:sourceFile "insurance.cml" .
-
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers> a ddd:Aggregate ;
     ddd:containsEntity <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address>,
         <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Customer> ;
     ddd:generatedBy "cml-converter" ;
     ddd:name "Customers" ;
-    ddd:ownedBy <https://example.org/kg/insurance/bc/ContractsTeam> ;
+    ddd:ownedBy <https://example.org/kg/insurance/team/ContractsTeam> ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext/Customers/Address> a ddd:Entity ;
@@ -715,6 +706,11 @@
     ddd:hasAttribute <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/identifier>,
         <https://example.org/kg/insurance/bc/PolicyManagementContext/Products/Product/productName> ;
     ddd:name "Product" ;
+    ddd:sourceFile "insurance.cml" .
+
+<https://example.org/kg/insurance/team/ContractsTeam> a ddd:Team ;
+    ddd:generatedBy "cml-converter" ;
+    ddd:name "ContractsTeam" ;
     ddd:sourceFile "insurance.cml" .
 
 <https://example.org/kg/insurance/bc/CustomerManagementContext> a ddd:BoundedContext ;

@@ -1,0 +1,34 @@
+@prefix sh:  <http://www.w3.org/ns/shacl#> .
+@prefix ddd: <https://example.org/ddd-metamodel#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# CLOSED-WORLD rules for the Conflict module (ddd-conflict.ttl).
+# A conflict always involves at least two elements: for a relationship
+# conflict, the relationship AND the faulty BC.
+# =============================================================================
+
+ddd:ConflictShape a sh:NodeShape ;
+    sh:targetClass ddd:Conflict ;
+    sh:property [
+        sh:path ddd:involves ; sh:minCount 2 ;
+        sh:message "A Conflict involves at least two elements (ddd:involves)."
+    ] ;
+    sh:property [
+        sh:path ddd:conflictType ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "homonym" "synonym" "relation" ) ;
+        sh:message "conflictType is mandatory, single, among: homonym, synonym, relation."
+    ] ;
+    sh:property [
+        sh:path ddd:status ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:in ( "proposed" "validated" "rejected" ) ;
+        sh:message "status is mandatory, single, among: proposed, validated, rejected."
+    ] ;
+    sh:property [
+        sh:path ddd:detectedBy ; sh:minCount 1 ; sh:maxCount 1 ; sh:pattern "^(llm|rule:.+)$" ;
+        sh:message "detectedBy is mandatory: 'llm' or 'rule:<identifier>'."
+    ] ;
+    sh:property [
+        sh:path ddd:evidence ; sh:minCount 1 ; sh:minLength 1 ;
+        sh:message "A Conflict must carry readable evidence (elements compared, difference)."
+    ] .

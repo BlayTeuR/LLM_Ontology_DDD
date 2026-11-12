@@ -4,10 +4,10 @@ A Hybrid LLM–Ontology Approach for Constructing the Ubiquitous Language and Re
 
 | Tool | What | Example |
 |---|---|---|
-| [**CML to OWL (.ttl)**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/cml_to_ttl) | Converts a Context Mapper file (.cml) into an OWL artifact (.ttl) conforming to the DDD metamodel (ddd-metamodel.ttl, version 0.2.0). No LLM involved: the conversion is deterministic. | `python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml` |
+| [**CML to OWL (.ttl)**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/cml_to_ttl) | Converts a Context Mapper file (.cml) into an OWL artifact (.ttl) conforming to the DDD metamodel (ddd-metamodel.ttl, version 0.3.0). No LLM involved: the conversion is deterministic. | `python cml_to_ttl/src/main_cml_to_ttl.py examples/insurance/insurance.cml` |
 | [**Reasoner (HermiT)**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/reasoner) | Checks the logical consistency of an artifact (.ttl) against the DDD metamodel with the HermiT reasoner (via Owlready2). Includes negative tests that inject errors into a valid artifact. First version: one file at a time, run manually. | `python reasoner/reason.py examples/insurance/insurance.ttl` |
 | [**Neo4j knowledge graph**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/neo4j_knowledge_graph) | Loads the generated artifacts (.ttl) into a Neo4j graph (neosemantics). Loading a file replaces the nodes previously loaded from the same source `.cml`. | `python neo4j_knowledge_graph/load_ttl_to_neo4j.py examples/insurance/insurance.ttl` |
-| [**Metamodel**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/metamodel) | The DDD metamodel: current version (`ddd-metamodel.ttl`, 0.2.0), its SHACL rules (`shapes.ttl`) and the archived previous versions. Read by the reasoner; the artifacts produced by the converter conform to it. | / |
+| [**Metamodel**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/metamodel) | The DDD metamodel: current version (`ddd-metamodel.ttl`, 0.3.0), the Conflict module (`ddd-conflict.ttl`), their SHACL rules (`shapes.ttl`, `shapes-conflict.ttl`) and the archived previous versions. Read by the reasoner; the artifacts produced by the converter conform to it. | / |
 | [**Examples**](https://github.com/BlayTeuR/LLM_Ontology_DDD/tree/main/examples) | Reference input and output of the pipeline (the Insurance example from Context Mapper). | / |
 
 ## Requirements
